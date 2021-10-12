@@ -1,0 +1,9 @@
+src/Stores/**/store.ts
+src/Stores/mod.ts
+src/mod.ts
+
+# Build Output
+
+/cjs
+/esm
+/types

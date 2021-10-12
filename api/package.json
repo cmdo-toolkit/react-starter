@@ -1,0 +1,32 @@
+{
+  "name": "api",
+  "private": true,
+  "cmdo": {
+    "type": "replica"
+  },
+  "scripts": {
+    "start": "./node_modules/.bin/ts-node src/index.ts",
+    "lint": "../node_modules/.bin/eslint 'src/**/*.ts'"
+  },
+  "dependencies": {
+    "chalk": "4.1.2",
+    "cmdo-http": "3.0.1",
+    "cmdo-socket": "3.0.0-rc3",
+    "dotenv": "10.0.0",
+    "eventemitter3": "4.0.7",
+    "jsonwebtoken": "8.5.1",
+    "mongodb": "4.1.2",
+    "nanoid": "3.1.25",
+    "shared": "../shared"
+  },
+  "devDependencies": {
+    "@swc/core": "^1.2.89",
+    "@swc/helpers": "^0.2.13",
+    "@types/eventemitter3": "2.0.2",
+    "@types/jsonwebtoken": "8.5.5",
+    "@types/mongodb": "4.0.6",
+    "@types/node": "16.9.6",
+    "@types/ws": "7.4.7",
+    "ts-node": "10.2.1"
+  }
+}

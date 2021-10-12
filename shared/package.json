@@ -1,0 +1,31 @@
+{
+  "name": "shared",
+  "private": true,
+  "cmdo": {
+    "type": "shared"
+  },
+  "main": "./cjs/mod.js",
+  "module": "./esm/mod.js",
+  "types": "./types/mod.d.ts",
+  "scripts": {
+    "start": "../node_modules/.bin/nodemon",
+    "build": "npm run clean && npm run build:modules && npm run build:esm && npm run build:cjs",
+    "build:modules": "../node_modules/.bin/cmdo shared",
+    "build:esm": "../node_modules/.bin/tsc --project tsconfig-esm.json && ../node_modules/.bin/cmdo output esm -f esm",
+    "build:cjs": "../node_modules/.bin/tsc --project tsconfig-cjs.json",
+    "clean": "rm -rf ./cjs ./esm ./types",
+    "lint": "../node_modules/.bin/eslint 'src/**/*.ts'"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "./src/mod.ts",
+      "./src/Stores/mod.ts",
+      "./src/Stores/**/store.ts"
+    ],
+    "watch": [
+      "./src"
+    ],
+    "ext": "ts",
+    "exec": "npm run build"
+  }
+}

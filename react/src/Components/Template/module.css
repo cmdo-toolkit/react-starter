@@ -1,0 +1,7 @@
+.container {
+  background-color: #252935;
+  border-radius: 11px;
+  padding: 25px;
+  overflow-y: scroll;
+  max-height: 500;
+}

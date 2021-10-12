@@ -1,0 +1,42 @@
+@import "normalize.css";
+
+$color-primary: #5dbaff;
+$color-primary-dark: darken(#5dbaff, 10);
+
+html,
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+input {
+  background-color: transparent;
+
+  border: 1px solid #ccc;
+  border-radius: 6px;
+
+  font-size: 15px;
+
+  box-sizing: border-box;
+  padding: 9px 13px;
+  width: 100%;
+}
+
+input:focus {
+  outline: none;
+}
+
+button {
+  background-color: $color-primary;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 15px;
+
+  min-width: 180px;
+  padding: 16px;
+
+  &:hover {
+    background-color: $color-primary-dark;
+    cursor: pointer;
+  }
+}
