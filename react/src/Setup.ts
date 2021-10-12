@@ -26,7 +26,7 @@ export async function setup(): Promise<void> {
 //#region
 
 async function dependencies(): Promise<void> {
-  await Promise.all([import("./Providers/AccessStore"), import("./Providers/EventStore"), import("./Providers/IDBStorage")]);
+  await Promise.all([import("./Providers/AccessStore"), import("./Providers/EventStore")]);
 }
 
 //#endregion

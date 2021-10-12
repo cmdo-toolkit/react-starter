@@ -17,7 +17,7 @@ type RecordMap<T> = {
 
 type Collections = RecordMap<typeof collections>;
 
-type Model<K extends keyof Collections> = InstanceType<ReturnType<Collections[K]>["model"]>;
+type Model<K extends keyof Collections> = InstanceType<Collections[K]["model"]>;
 
 type Opts = {
   filter?: any;
@@ -56,7 +56,7 @@ export function useQuery<K extends keyof Collections, T extends Model<K>>(key: K
 
   useEffect(() => {
     const { filter, observe = true, singleton = false, args = [], ...options } = JSON.parse(cached) as Opts;
-    const collection = collections[key](...args);
+    const collection = collections[key];
     if (singleton === true) {
       if (observe) {
         return collection.observeOne(filter).subscribe(setData).unsubscribe;

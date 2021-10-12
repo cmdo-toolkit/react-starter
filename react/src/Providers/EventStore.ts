@@ -6,18 +6,19 @@ import { collections } from "../Data/Collections";
 
 export const store = new (class MingoEventStore extends Store {
   public async insert({ id, stream, event }: Descriptor) {
-    const count = await getStream(stream).count({
+    const count = await collections.events.count({
       stream,
       "event.data.id": event.data.id,
       "event.meta.created": event.meta.created
     });
     if (count === 0) {
-      return getStream(stream).insert({ id, stream, event });
+      return collections.events.insert({ id, stream, event });
     }
   }
 
   public async outdated({ stream, event }: Descriptor) {
-    const count = await getStream(stream).count({
+    const count = await collections.events.count({
+      stream,
       "event.type": event.type,
       "event.data.id": event.data.id,
       "event.meta.created": {
@@ -33,7 +34,3 @@ export const store = new (class MingoEventStore extends Store {
 })(events);
 
 container.set("Store", store);
-
-export function getStream(name: string) {
-  return collections.events(name);
-}

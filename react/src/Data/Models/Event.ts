@@ -4,6 +4,8 @@ import { Descriptor } from "cmdo-events";
 type Attributes = Document & Descriptor;
 
 export class Event extends Model<Attributes> {
+  public static readonly $collection = "events";
+
   public readonly stream: Attributes["stream"];
   public readonly event: Attributes["event"];
 

@@ -24,6 +24,8 @@ type Attributes = Document & {
 //#region
 
 export class User extends Model<Attributes> {
+  public static readonly $collection = "users";
+
   public readonly name: Attributes["name"];
   public readonly email: Attributes["email"];
 
