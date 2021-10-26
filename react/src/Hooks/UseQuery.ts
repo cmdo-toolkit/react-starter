@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-import type { Collections, Many, Model, Options, Single } from "./Types/Query";
-import { resolveMany, resolveOne } from "./Utils/Query";
+import type { Collections, Many, Model, Options, Single } from "../Types/Query";
+import { resolveMany, resolveOne } from "../Utils/Query";
 
 /**
  * Perform a query against a registered database collection.

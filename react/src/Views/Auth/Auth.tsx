@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import React from "react";
 
 import graphic from "../../Assets/auth-graphic.jpg";
-import { Pin } from "../../Components/Pin";
+import { Pin } from "../../Components/Common/Pin";
 import { useAuthentication } from "../../Hooks/UseAuthentication";
 import s from "./Auth.module.scss";
 

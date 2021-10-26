@@ -1,0 +1,12 @@
+.container {
+  display: grid;
+  grid-template-rows: auto;
+  grid-template-columns: 1fr 1fr;
+
+  row-gap: 20px;
+  column-gap: 20px;
+}
+
+.menu {
+  margin-bottom: 25px;
+}

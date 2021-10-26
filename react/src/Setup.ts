@@ -8,14 +8,10 @@ socket.connect();
  |--------------------------------------------------------------------------------
  */
 
-//#region
-
 export async function setup(): Promise<void> {
   await dependencies();
   await event();
 }
-
-//#endregion
 
 /*
  |--------------------------------------------------------------------------------
@@ -23,13 +19,9 @@ export async function setup(): Promise<void> {
  |--------------------------------------------------------------------------------
  */
 
-//#region
-
 async function dependencies(): Promise<void> {
   await Promise.all([import("./Providers/AccessStore"), import("./Providers/EventStore")]);
 }
-
-//#endregion
 
 /*
  |--------------------------------------------------------------------------------
@@ -37,10 +29,6 @@ async function dependencies(): Promise<void> {
  |--------------------------------------------------------------------------------
  */
 
-//#region
-
 async function event() {
   await Promise.all([import("./Data/Projections/User")]);
 }
-
-//#endregion

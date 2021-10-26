@@ -2,7 +2,7 @@ import "./App.scss";
 
 import React, { Fragment } from "react";
 
-import { RouteLoader } from "./Components/RouteLoader";
+import { RouteLoader } from "./Components/Common/RouteLoader";
 import { useRouter } from "./Hooks/UseRouter";
 import { router } from "./Router";
 import { setup } from "./Setup";

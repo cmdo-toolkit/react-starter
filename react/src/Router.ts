@@ -13,19 +13,13 @@ export const router = new Router(createBrowserHistory());
  |--------------------------------------------------------------------------------
  */
 
-//#region
-
 router.register([new Route("/", [render([Auth], "Auth")]), new Route("/dashboard", [render([Layout, Dashboard], "Dashboard")])]);
-
-//#endregion
 
 /*
  |--------------------------------------------------------------------------------
  | Actions
  |--------------------------------------------------------------------------------
  */
-
-//#region
 
 function render(components: any[], title: string): Action {
   return async function () {
@@ -37,5 +31,3 @@ function render(components: any[], title: string): Action {
 function setPageTitle(title: string): void {
   document.title = `Toolkit | ${title}`;
 }
-
-//#endregion

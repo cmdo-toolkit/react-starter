@@ -1,11 +1,3 @@
-/*
- |--------------------------------------------------------------------------------
- | Types
- |--------------------------------------------------------------------------------
- */
-
-//#region
-
 export type State =
   | {
       status: "pending" | "hydrating" | "started";
@@ -27,16 +19,6 @@ type Action =
       type: "FAILED";
       error: Error;
     };
-
-//#endregion
-
-/*
- |--------------------------------------------------------------------------------
- | Reducer
- |--------------------------------------------------------------------------------
- */
-
-//#region
 
 export function reducer(state: State, action: Action): State {
   switch (action.type) {
@@ -64,21 +46,9 @@ export function reducer(state: State, action: Action): State {
   }
 }
 
-//#endregion
-
-/*
- |--------------------------------------------------------------------------------
- | Utilities
- |--------------------------------------------------------------------------------
- */
-
-//#region
-
 export function getDefaultState(): State {
   return {
     status: "pending",
     error: undefined
   };
 }
-
-//#endregion
