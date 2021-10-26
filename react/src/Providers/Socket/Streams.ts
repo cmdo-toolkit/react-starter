@@ -9,8 +9,6 @@ const debug = log.socket.extend("streams");
  |--------------------------------------------------------------------------------
  */
 
-//#region
-
 export class Streams implements Service {
   private readonly streams = new Set<string>();
 
@@ -22,13 +20,9 @@ export class Streams implements Service {
    |--------------------------------------------------------------------------------
    */
 
-  //#region
-
   public static create(socket: Socket) {
     return new this(socket);
   }
-
-  //#endregion
 
   /*
    |--------------------------------------------------------------------------------
@@ -36,13 +30,9 @@ export class Streams implements Service {
    |--------------------------------------------------------------------------------
    */
 
-  //#region
-
   public get streamsIds(): string[] {
     return Array.from(this.streams);
   }
-
-  //#endregion
 
   /*
    |--------------------------------------------------------------------------------
@@ -50,23 +40,17 @@ export class Streams implements Service {
    |--------------------------------------------------------------------------------
    */
 
-  //#region
-
   public async onConnect(): Promise<void> {
     for (const streamId of Array.from(this.streams)) {
       this.join(streamId);
     }
   }
 
-  //#endregion
-
   /*
    |--------------------------------------------------------------------------------
    | Utilities
    |--------------------------------------------------------------------------------
    */
-
-  //#region
 
   public async join(stream: string) {
     return this.socket
@@ -88,8 +72,4 @@ export class Streams implements Service {
       return this;
     });
   }
-
-  //#endregion
 }
-
-//#endregion

@@ -4,7 +4,7 @@ import { Event, events } from "shared";
 
 import { mongo } from "../Lib/Mongo";
 
-export const store = new (class MongoEventStore extends Store {
+export const store = new (class MongoEventStore extends Store<Event> {
   public readonly collection = mongo.collection<Descriptor>("events");
 
   public async insert({ id, stream, event }: Descriptor) {
@@ -12,6 +12,18 @@ export const store = new (class MongoEventStore extends Store {
     if (!isDuplicate) {
       return this.collection.insertOne({ id, stream, event });
     }
+  }
+
+  public async find(filter: any): Promise<Event[]> {
+    return this.collection
+      .find(filter)
+      .sort({
+        "event.meta.created": 1
+      })
+      .toArray()
+      .then((events) => {
+        return events.map((descriptor) => this.toEvent(descriptor));
+      });
   }
 
   public async outdated({ stream, event }: Descriptor) {

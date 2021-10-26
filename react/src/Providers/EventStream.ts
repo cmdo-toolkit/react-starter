@@ -15,8 +15,6 @@ const log = {
  |--------------------------------------------------------------------------------
  */
 
-//#region
-
 export class EventStream extends Stream {
   public async connect(): Promise<void> {
     await socket.streams.join(this.name);
@@ -42,15 +40,11 @@ export class EventStream extends Stream {
   }
 }
 
-//#endregion
-
 /*
  |--------------------------------------------------------------------------------
  | Event Handlers
  |--------------------------------------------------------------------------------
  */
-
-//#region
 
 socket.on("connected", () => {
   EventStream.connect();
@@ -74,5 +68,3 @@ store.on("saved", (descriptor) => {
 socket.on("disconnected", () => {
   EventStream.disconnect();
 });
-
-//#endregion

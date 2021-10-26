@@ -3,14 +3,6 @@ import React, { useEffect, useState } from "react";
 
 import { router } from "../Router";
 
-/*
- |--------------------------------------------------------------------------------
- | Hook
- |--------------------------------------------------------------------------------
- */
-
-//#region
-
 export function useRouter(
   router: Router,
   preload: () => Promise<void>,
@@ -40,21 +32,9 @@ export function useRouter(
   return view;
 }
 
-//#endregion
-
-/*
- |--------------------------------------------------------------------------------
- | Utilities
- |--------------------------------------------------------------------------------
- */
-
-//#region
-
 function createReactElement(list: React.ComponentType[], props = { ...router.params.get(), ...router.query.get() }): any {
   if (list.length === 1) {
     return React.createElement(list[0], props);
   }
   return React.createElement(list[0], props, createReactElement(list.slice(1, list.length), props));
 }
-
-//#endregion

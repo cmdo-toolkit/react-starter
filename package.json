@@ -6,19 +6,24 @@
     "root": true
   },
   "jest": {
-    "roots": ["<rootDir>"],
+    "roots": [
+      "<rootDir>"
+    ],
     "transform": {
       "^.+\\.ts$": "ts-jest"
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.ts?$",
-    "moduleFileExtensions": ["ts", "js"]
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
   },
   "scripts": {
     "test": "node --inspect ./node_modules/.bin/jest --runInBand --verbose"
   },
   "dependencies": {
     "cmdo-auth": "1.0.0-rc8",
-    "cmdo-events": "3.0.0-rc12"
+    "cmdo-events": "3.0.0-rc13"
   },
   "devDependencies": {
     "@types/jest": "27.0.2",

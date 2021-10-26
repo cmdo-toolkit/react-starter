@@ -9,8 +9,6 @@ const debug = log.socket.extend("channels");
  |--------------------------------------------------------------------------------
  */
 
-//#region
-
 export class Channels implements Service {
   private readonly channels = new Set<string>();
 
@@ -22,13 +20,9 @@ export class Channels implements Service {
    |--------------------------------------------------------------------------------
    */
 
-  //#region
-
   public static create(socket: Socket) {
     return new this(socket);
   }
-
-  //#endregion
 
   /*
    |--------------------------------------------------------------------------------
@@ -36,23 +30,17 @@ export class Channels implements Service {
    |--------------------------------------------------------------------------------
    */
 
-  //#region
-
   public async onConnect(): Promise<void> {
     for (const channelId of Array.from(this.channels)) {
       this.join(channelId);
     }
   }
 
-  //#endregion
-
   /*
    |--------------------------------------------------------------------------------
    | Utilities
    |--------------------------------------------------------------------------------
    */
-
-  //#region
 
   public async join(channelId: string) {
     return this.socket
@@ -74,8 +62,4 @@ export class Channels implements Service {
       return this;
     });
   }
-
-  //#endregion
 }
-
-//#endregion

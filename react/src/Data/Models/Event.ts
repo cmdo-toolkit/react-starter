@@ -1,15 +1,15 @@
-import { Document, Model } from "cmdo-db";
+import { Model } from "cmdo-db";
 import { Descriptor } from "cmdo-events";
 
-type Attributes = Document & Descriptor;
+import { store } from "../../Providers/EventStore";
 
-export class Event extends Model<Attributes> {
+export class Event extends Model<Descriptor> {
   public static readonly $collection = "events";
 
-  public readonly stream: Attributes["stream"];
-  public readonly event: Attributes["event"];
+  public readonly stream: Descriptor["stream"];
+  public readonly event: Descriptor["event"];
 
-  constructor(document: Attributes) {
+  constructor(document: Descriptor) {
     super(document);
 
     this.stream = document.stream;
@@ -18,7 +18,11 @@ export class Event extends Model<Attributes> {
     Object.freeze(this);
   }
 
-  public toJSON(): Attributes {
+  public toEvent() {
+    return store.toEvent(this.toJSON());
+  }
+
+  public toJSON(): Descriptor {
     return super.toJSON({
       stream: this.stream,
       event: this.event

@@ -3,14 +3,6 @@ import { useEffect, useReducer } from "react";
 import { EventStream } from "../Providers/EventStream";
 import { getDefaultState, reducer, State } from "../Reducers/Stream";
 
-/*
- |--------------------------------------------------------------------------------
- | Hook
- |--------------------------------------------------------------------------------
- */
-
-//#region
-
 export function useStream(name: string): State {
   const [state, dispatch] = useReducer(reducer, getDefaultState());
 
@@ -40,5 +32,3 @@ export function useStream(name: string): State {
 
   return state;
 }
-
-//#endregion

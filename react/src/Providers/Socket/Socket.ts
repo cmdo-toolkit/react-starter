@@ -10,8 +10,6 @@ import { Streams } from "./Streams";
  |--------------------------------------------------------------------------------
  */
 
-//#region
-
 export const socket = new Socket({
   uri: config.socket,
   services: {
@@ -24,15 +22,11 @@ export const socket = new Socket({
     streams: Streams;
   }>;
 
-//#endregion
-
 /*
  |--------------------------------------------------------------------------------
  | Debug
  |--------------------------------------------------------------------------------
  */
-
-//#region
 
 declare global {
   interface Window {
@@ -41,5 +35,3 @@ declare global {
 }
 
 window.socket = socket;
-
-//#endregion

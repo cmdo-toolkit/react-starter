@@ -25,8 +25,6 @@ export const authentication = new (class Authentication extends EventEmitter<{
    |--------------------------------------------------------------------------------
    */
 
-  //#region
-
   public next() {
     switch (this.step) {
       case "provider": {
@@ -36,15 +34,11 @@ export const authentication = new (class Authentication extends EventEmitter<{
     }
   }
 
-  //#endregion
-
   /*
    |--------------------------------------------------------------------------------
    | Actions
    |--------------------------------------------------------------------------------
    */
-
-  //#region
 
   public async sendProvider() {
     const check = this.email.check();
@@ -73,15 +67,11 @@ export const authentication = new (class Authentication extends EventEmitter<{
       });
   }
 
-  //#endregion
-
   /*
    |--------------------------------------------------------------------------------
    | Transitions
    |--------------------------------------------------------------------------------
    */
-
-  //#region
 
   public goToProvider(error?: string): void {
     this.setStep("provider", error);
@@ -92,15 +82,11 @@ export const authentication = new (class Authentication extends EventEmitter<{
     forms.focus("connect", "token");
   }
 
-  //#endregion
-
   /*
    |--------------------------------------------------------------------------------
    | Utilities
    |--------------------------------------------------------------------------------
    */
-
-  //#region
 
   public setStep(step: Step, error?: string) {
     this.step = step;
@@ -110,6 +96,4 @@ export const authentication = new (class Authentication extends EventEmitter<{
   public reset() {
     this.email.reset();
   }
-
-  //#endregion
 })();

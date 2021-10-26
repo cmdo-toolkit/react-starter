@@ -1,27 +1,10 @@
 import { Document, Model } from "cmdo-db";
-
-/*
- |--------------------------------------------------------------------------------
- | Types
- |--------------------------------------------------------------------------------
- */
-
-//#region
+import { stores } from "shared";
 
 type Attributes = Document & {
   name: string;
   email: string;
 };
-
-//#endregion
-
-/*
- |--------------------------------------------------------------------------------
- | Main
- |--------------------------------------------------------------------------------
- */
-
-//#region
 
 export class User extends Model<Attributes> {
   public static readonly $collection = "users";
@@ -38,6 +21,30 @@ export class User extends Model<Attributes> {
     Object.freeze(this);
   }
 
+  /*
+   |--------------------------------------------------------------------------------
+   | Actions
+   |--------------------------------------------------------------------------------
+   */
+
+  public setName(name: string) {
+    return stores.user.setName({ id: this.id, name });
+  }
+
+  public setEmail(email: string) {
+    return stores.user.setEmail({ id: this.id, email });
+  }
+
+  public remove() {
+    return stores.user.remove({ id: this.id });
+  }
+
+  /*
+   |--------------------------------------------------------------------------------
+   | Serializer
+   |--------------------------------------------------------------------------------
+   */
+
   public toJSON(): Attributes {
     return super.toJSON({
       name: this.name,
@@ -45,5 +52,3 @@ export class User extends Model<Attributes> {
     });
   }
 }
-
-//#endregion

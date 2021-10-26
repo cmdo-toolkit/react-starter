@@ -1,6 +1,5 @@
 import * as faker from "faker";
 import React from "react";
-import { stores } from "shared";
 
 import { useQuery } from "../../Hooks/UseQuery";
 import { Module } from "../Template/Module";
@@ -11,32 +10,14 @@ export function Users() {
   return (
     <Module>
       <ModuleTitle text="Users" />
-      {users.map(({ id, name, email }) => (
-        <div key={id} style={{ marginBottom: 20 }}>
-          <div>{id}</div>
-          <div>{name}</div>
-          <div>{email}</div>
-          <button
-            onClick={() => {
-              stores.user.remove({ id });
-            }}
-          >
-            Delete
-          </button>
-          <button
-            onClick={() => {
-              stores.user.setName({ id, name: faker.name.firstName() });
-            }}
-          >
-            Change Name
-          </button>
-          <button
-            onClick={() => {
-              stores.user.setEmail({ id, email: faker.internet.email() });
-            }}
-          >
-            Change Email
-          </button>
+      {users.map((user) => (
+        <div key={user.id} style={{ marginBottom: 20 }}>
+          <div>{user.id}</div>
+          <div>{user.name}</div>
+          <div>{user.email}</div>
+          <button onClick={() => user.remove()}>Delete</button>
+          <button onClick={() => user.setName(faker.name.firstName())}>Change Name</button>
+          <button onClick={() => user.setEmail(faker.internet.email())}>Change Email</button>
         </div>
       ))}
     </Module>

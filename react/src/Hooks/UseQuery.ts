@@ -1,102 +1,45 @@
-import type { Options } from "cmdo-db";
 import { useEffect, useState } from "react";
 
-import { collections } from "../Data/Collections";
+import type { Collections, Many, Model, Options, Single } from "./Types/Query";
+import { resolveMany, resolveOne } from "./Utils/Query";
 
-/*
- |--------------------------------------------------------------------------------
- | Types
- |--------------------------------------------------------------------------------
+/**
+ * Perform a query against a registered database collection.
+ *
+ * @remarks
+ *
+ * The behavior of this query is dependent on the options provided. The primary behavior difference
+ * is when providing the `singleton` option.
+ *
+ * When `singleton` is `true` the query will result in a `undefined` or resolved `model`. When the
+ * `singleton` is `false` the query will result in an array of `models`. By default the `singleton`
+ * value is `false` and will return an array.
+ *
+ * Follow the `Options` type for more details on what options are available.
+ *
+ * @example
+ *
+ * ```ts
+ * const users = useQuery("users"); // => User[]
+ * const user = useQuery("users", { singleton: true }); // => User | undefined
+ * ```
+ *
+ * @param key     - Database collection to query.
+ * @param options - Provided query options.
+ *
+ * @returns Instanced collection model(s)
  */
-
-//#region
-
-type RecordMap<T> = {
-  [P in keyof T]: T[P];
-};
-
-type Collections = RecordMap<typeof collections>;
-
-type Model<K extends keyof Collections> = InstanceType<Collections[K]["model"]>;
-
-type Opts = {
-  filter?: any;
-  sort?: Options["sort"];
-  skip?: Options["skip"];
-  limit?: Options["limit"];
-  observe?: boolean;
-  singleton?: boolean;
-  args?: any[];
-};
-
-type Single = Opts & {
-  singleton: true;
-};
-
-type Many = Opts & {
-  singleton?: false | undefined;
-};
-
-//#endregion
-
-/*
- |--------------------------------------------------------------------------------
- | Hooks
- |--------------------------------------------------------------------------------
- */
-
-//#region
-
 export function useQuery<K extends keyof Collections, T extends Model<K>>(key: K, options?: Many): T[];
 export function useQuery<K extends keyof Collections, T extends Model<K>>(key: K, options?: Single): T | undefined;
-export function useQuery<K extends keyof Collections, T extends Model<K>>(key: K, options: Opts = {}): T[] | T | undefined {
-  const [data, setData] = useState<any>();
-
-  const cached = JSON.stringify(options);
+export function useQuery<K extends keyof Collections, T extends Model<K>>(key: K, options: Options = {}): T[] | T | undefined {
+  const [data, setData] = useState();
 
   useEffect(() => {
-    const { filter, observe = true, singleton = false, args = [], ...options } = JSON.parse(cached) as Opts;
-    const collection = collections[key];
-    if (singleton === true) {
-      if (observe) {
-        return collection.observeOne(filter).subscribe(setData).unsubscribe;
-      }
-      collection.findOne(filter).then(setData);
-    } else {
-      if (observe) {
-        return collection.observe(filter, getQueryOptions(options)).subscribe(setData).unsubscribe;
-      }
-      collection.find(filter).then(setData);
+    if (options.singleton === true) {
+      return resolveOne(key, options, setData);
     }
-  }, [key, cached]);
+    return resolveMany(key, options, setData);
+  }, [key, JSON.stringify(options)]);
 
   return data ? data : options.singleton === true ? undefined : [];
 }
-
-//#endregion
-
-/*
- |--------------------------------------------------------------------------------
- | Utilities
- |--------------------------------------------------------------------------------
- */
-
-//#region
-
-function getQueryOptions(opts: Opts): Options | undefined {
-  const options: Options = {};
-  if (opts.sort) {
-    options.sort = opts.sort;
-  }
-  if (opts.skip !== undefined) {
-    options.skip = opts.skip;
-  }
-  if (opts.limit !== undefined) {
-    options.limit = opts.limit;
-  }
-  if (Object.keys(options).length > 0) {
-    return options;
-  }
-}
-
-//#endregion
