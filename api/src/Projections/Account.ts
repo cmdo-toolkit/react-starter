@@ -5,7 +5,7 @@ import { Attributes } from "../Lib/Account";
 import { event } from "../Lib/Account/Event";
 import { mongo } from "../Lib/Mongo";
 
-project.continuous(AccountCreated, async ({ data: { id, email } }) => {
+project.on(AccountCreated, async ({ data: { id, email } }) => {
   const attributes: Attributes = {
     id,
     status: "onboarding",
@@ -17,10 +17,10 @@ project.continuous(AccountCreated, async ({ data: { id, email } }) => {
   event.created(attributes);
 });
 
-project.continuous(AccountActivated, async ({ data: { id } }) => {
+project.on(AccountActivated, async ({ data: { id } }) => {
   await mongo.collection<Attributes>("accounts").updateOne({ id }, { $set: { status: "active" } });
 });
 
-project.continuous(AccountClosed, async ({ data: { id } }) => {
+project.on(AccountClosed, async ({ data: { id } }) => {
   await mongo.collection<Attributes>("accounts").updateOne({ id }, { $set: { status: "closed" } });
 });
