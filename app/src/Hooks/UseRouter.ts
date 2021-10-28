@@ -1,18 +1,14 @@
-import type { Router } from "cmdo-router";
 import React, { useEffect, useState } from "react";
 
 import { router } from "../Router";
+import { setup } from "../Setup";
 
-export function useRouter(
-  router: Router,
-  preload: () => Promise<void>,
-  onError: (err: any) => JSX.Element | undefined
-): JSX.Element | null {
+export function useRouter(onError: (err: any) => JSX.Element | undefined): JSX.Element | null {
   const [view, setView] = useState<JSX.Element | null>(null);
 
   useEffect(() => {
     const { pathname, search, state } = router.history.location;
-    preload().then(() => {
+    setup().then(() => {
       router
         .listen({
           render: async (components: React.ComponentType[]) => {
@@ -27,7 +23,7 @@ export function useRouter(
         })
         .goTo(`${pathname}${search}`, state);
     });
-  }, [router, preload, onError]);
+  }, [onError]);
 
   return view;
 }

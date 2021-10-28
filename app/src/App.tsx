@@ -2,10 +2,9 @@ import "./App.scss";
 
 import React, { Fragment } from "react";
 
+import { PageLoader } from "./Components/Common/PageLoader";
 import { RouteLoader } from "./Components/Common/RouteLoader";
 import { useRouter } from "./Hooks/UseRouter";
-import { router } from "./Router";
-import { setup } from "./Setup";
 
 /*
  |--------------------------------------------------------------------------------
@@ -14,14 +13,12 @@ import { setup } from "./Setup";
  */
 
 export function App(): JSX.Element {
-  const view = useRouter(router, setup, error);
+  const view = useRouter(handleError);
   if (!view) {
     return (
       <Fragment>
         <RouteLoader />
-        <div className="flex h-screen">
-          <div className="m-auto text-indigo-500">Loader</div>
-        </div>
+        <PageLoader />
       </Fragment>
     );
   }
@@ -34,12 +31,7 @@ export function App(): JSX.Element {
  |--------------------------------------------------------------------------------
  */
 
-/**
- * Handle routing errors.
- *
- * @param error
- */
-function error(err: any): JSX.Element {
+function handleError(err: any): JSX.Element {
   return (
     <div className="flex h-screen">
       <div className="m-auto">

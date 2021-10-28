@@ -1,51 +1,19 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 
-import { forms } from "../../../Lib/Forms";
+import type { InputsRef } from "../../../Hooks/UsePin";
 import s from "./Pin.module.scss";
 
 type Props = {
-  id?: string;
-  name?: string;
+  inputs: InputsRef;
+  className?: string;
   size?: number;
   disabled?: boolean;
-  onChange: OnChange;
+  onComplete?: () => void;
 };
 
-type State = {
-  data: () => string;
-  onChange: OnChange;
-};
-
-type OnChange = (index: number, value: string) => void;
-
-export function Pin({ id, name, size = 5, disabled = false, onChange }: Props): JSX.Element {
-  const inputs = useRef<Map<number, HTMLInputElement>>(new Map());
-  const values = useRef<Map<number, string>>(new Map());
-
-  useEffect(
-    () =>
-      forms.subscribe("focus", (fid: string, target?: string) => {
-        if (id === fid && target === name) {
-          inputs.current.get(0)?.focus();
-        }
-      }),
-    [id, name]
-  );
-
-  useEffect(
-    () =>
-      forms.subscribe("clear", (fid: string) => {
-        if (id === fid) {
-          inputs.current.forEach((input) => {
-            input.value = "";
-          });
-        }
-      }),
-    [id, name]
-  );
-
+export function Pin({ inputs, className = "", size = 5, disabled = false, onComplete }: Props): JSX.Element {
   return (
-    <div className={s.container}>
+    <div className={`${s.container} ${className}`.trim()}>
       {Array.from(Array(size)).map((_, index) => (
         <input
           key={index}
@@ -66,7 +34,6 @@ export function Pin({ id, name, size = 5, disabled = false, onChange }: Props): 
                   if (input) {
                     input.blur();
                     input.value = value;
-                    onChange(index, value);
                   }
                 });
               });
@@ -75,12 +42,12 @@ export function Pin({ id, name, size = 5, disabled = false, onChange }: Props): 
           onKeyUp={({ key }) => {
             if (key === "Backspace") {
               const nextIndex = index - 1;
-              const hasValue = values.current.has(index) && values.current.get(index) !== "";
+              const hasValue = inputs.current.has(index) && inputs.current.get(index)?.value !== "";
               if (!hasValue && nextIndex > -1) {
                 inputs.current.get(nextIndex)?.focus();
               }
             } else {
-              const hasValue = values.current.has(index) && values.current.get(index) !== "";
+              const hasValue = inputs.current.has(index) && inputs.current.get(index)?.value !== "";
               if (hasValue) {
                 const nextIndex = index + 1;
                 if (nextIndex < size) {
@@ -92,24 +59,22 @@ export function Pin({ id, name, size = 5, disabled = false, onChange }: Props): 
           onFocus={() => {
             inputs.current.get(index)?.select();
           }}
-          onChange={({ target: { value } }) => {
-            values.current.set(index, value);
-            onChange(index, value);
+          onChange={() => {
+            if (onComplete) {
+              let isComplete = true;
+              for (const key of inputs.current.keys()) {
+                if (inputs.current.get(key)?.value === "") {
+                  isComplete = false;
+                  break;
+                }
+              }
+              if (isComplete) {
+                onComplete();
+              }
+            }
           }}
         />
       ))}
     </div>
   );
-}
-
-export function usePin(): State {
-  const ref = useRef<string[]>([]);
-  return {
-    data() {
-      return ref.current.reduce((pin, value) => `${pin}${value}`, "");
-    },
-    onChange(index: number, value: string) {
-      ref.current[index] = value;
-    }
-  };
 }

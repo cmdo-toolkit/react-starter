@@ -1,9 +1,10 @@
 import { customAlphabet } from "nanoid";
 
+import { config } from "../../Config";
 import { mongo } from "../Mongo";
 import { Attributes } from "./Attributes";
 
-const generateToken = customAlphabet("1234567890", 5);
+const generateToken = customAlphabet(config.auth.token.letters, config.auth.token.length);
 
 export class Token {
   public readonly id: string;
