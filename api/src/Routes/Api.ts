@@ -10,8 +10,6 @@ import { wss } from "../Providers/WebSocketServer";
  |--------------------------------------------------------------------------------
  */
 
-//#region
-
 router.register([
   Route.get("", [
     async function () {
@@ -23,21 +21,15 @@ router.register([
   ])
 ]);
 
-//#endregion
-
 /*
  |--------------------------------------------------------------------------------
  | Action
  |--------------------------------------------------------------------------------
  */
 
-//#region
-
 const ping: Action = async function () {
   return this.respond({ pong: true });
 };
-
-//#endregion
 
 /*
  |--------------------------------------------------------------------------------
@@ -45,8 +37,4 @@ const ping: Action = async function () {
  |--------------------------------------------------------------------------------
  */
 
-//#region
-
 wss.register([SocketRoute.on("ping", [ping])]);
-
-//#endregion

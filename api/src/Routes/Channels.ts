@@ -9,8 +9,6 @@ import { wss } from "../Providers/WebSocketServer";
  |--------------------------------------------------------------------------------
  */
 
-//#region
-
 const join: Action<{ channelId: string }> = async function (socket, { channelId }) {
   if (channelId !== "public") {
     const permission = socket.auth.access.get(channelId).can("join", "room");
@@ -32,20 +30,14 @@ const message: Action<{ channelId: string; message: string }> = async function (
   return this.respond();
 };
 
-//#endregion
-
 /*
  |--------------------------------------------------------------------------------
  | Register
  |--------------------------------------------------------------------------------
  */
 
-//#region
-
 wss.register([
   Route.on("channels.join", [hasData(["channelId"]), join]),
   Route.on("channels.leave", [hasData(["channelId"]), leave]),
   Route.on("channels.message", [hasData(["channelId", "message"]), message])
 ]);
-
-//#endregion

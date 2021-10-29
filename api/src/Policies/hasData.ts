@@ -6,8 +6,6 @@ import { Action as SocketAction } from "cmdo-socket";
  |--------------------------------------------------------------------------------
  */
 
-//#region
-
 export function hasData(keys: string[]): SocketAction {
   return async function (_, data) {
     const missing: string[] = [];
@@ -22,5 +20,3 @@ export function hasData(keys: string[]): SocketAction {
     return this.accept();
   };
 }
-
-//#endregion

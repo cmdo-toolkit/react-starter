@@ -11,14 +11,10 @@ import { wss } from "../Providers/WebSocketServer";
  |--------------------------------------------------------------------------------
  */
 
-//#region
-
 const create: Action<{ name: string; email: string }> = async function (_, data) {
   stores.user.create({ id: nanoid(), ...data });
   return this.respond();
 };
-
-//#endregion
 
 /*
  |--------------------------------------------------------------------------------
@@ -26,8 +22,4 @@ const create: Action<{ name: string; email: string }> = async function (_, data)
  |--------------------------------------------------------------------------------
  */
 
-//#region
-
 wss.register([Route.on("user.create", [hasData(["name", "email"]), create])]);
-
-//#endregion

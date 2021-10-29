@@ -9,8 +9,4 @@ import { router } from "./Router";
  |--------------------------------------------------------------------------------
  */
 
-//#region
-
 export const hts = server([cors(), auth.http, route(router)]);
-
-//#endregion

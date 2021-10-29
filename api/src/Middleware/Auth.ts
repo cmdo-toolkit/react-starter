@@ -9,8 +9,6 @@ import { ServerResponse } from "http";
  |--------------------------------------------------------------------------------
  */
 
-//#region
-
 declare module "cmdo-socket" {
   interface Client {
     auth: Auth;
@@ -23,15 +21,11 @@ declare module "http" {
   }
 }
 
-//#endregion
-
 /*
  |--------------------------------------------------------------------------------
  | Middleware
  |--------------------------------------------------------------------------------
  */
-
-//#region
 
 export const auth: {
   socket: Action;
@@ -56,15 +50,11 @@ export const auth: {
   }
 };
 
-//#endregion
-
 /*
  |--------------------------------------------------------------------------------
  | Utilities
  |--------------------------------------------------------------------------------
  */
-
-//#region
 
 function sendUnauthorizedResponse(res: ServerResponse, error: Error): void {
   res.statusCode = 401;
@@ -72,5 +62,3 @@ function sendUnauthorizedResponse(res: ServerResponse, error: Error): void {
   res.write(JSON.stringify(new HttpError(401, "Unauthorized", { error })));
   res.end();
 }
-
-//#endregion

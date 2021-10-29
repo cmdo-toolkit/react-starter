@@ -26,8 +26,6 @@ export class Account {
    |--------------------------------------------------------------------------------
    */
 
-  //#region
-
   public static async create(email: string) {
     return new Promise<Account>((resolve, reject) => {
       event.create(email, (error, attributes) => {
@@ -62,29 +60,21 @@ export class Account {
     }
   }
 
-  //#endregion
-
   /*
    |--------------------------------------------------------------------------------
    | Utilities
    |--------------------------------------------------------------------------------
    */
 
-  //#region
-
   public is(status: Status) {
     return this.status === status;
   }
-
-  //#endregion
 
   /*
    |--------------------------------------------------------------------------------
    | Serializers
    |--------------------------------------------------------------------------------
    */
-
-  //#region
 
   public toJSON(attributes: Partial<Attributes>) {
     return {
@@ -96,6 +86,4 @@ export class Account {
       ...attributes
     };
   }
-
-  //#endregion
 }

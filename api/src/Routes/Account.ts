@@ -11,11 +11,7 @@ import { wss } from "../Providers/WebSocketServer";
  |--------------------------------------------------------------------------------
  */
 
-//#region
-
 wss.register([
   Route.on("account.token", [hasData(["email"]), createToken]),
   Route.on("account.validate", [hasData(["email", "token"]), validateToken])
 ]);
-
-//#endregion

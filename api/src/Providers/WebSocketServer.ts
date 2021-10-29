@@ -8,8 +8,4 @@ import { auth } from "../Middleware/Auth";
  |--------------------------------------------------------------------------------
  */
 
-//#region
-
 export const wss = new Server({}, [auth.socket]);
-
-//#endregion

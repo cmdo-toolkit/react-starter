@@ -11,8 +11,6 @@ import { wss } from "../Providers/WebSocketServer";
  |--------------------------------------------------------------------------------
  */
 
-//#region
-
 const add: Action<Descriptor> = async function (socket, descriptor) {
   // const permission = socket.auth.access.get(descriptor.stream).can("add", descriptor.event.type);
   // if (!permission.granted) {
@@ -36,16 +34,10 @@ const get: Action<{ stream: string; checkpoint?: string }> = async function (soc
   return this.respond(await store.collection.find(filter).sort({ "event.meta.localId": 1 }).toArray());
 };
 
-//#endregion
-
 /*
  |--------------------------------------------------------------------------------
  | Register
  |--------------------------------------------------------------------------------
  */
 
-//#region
-
 wss.register([Route.on("events.add", [hasData(["id", "stream", "event"]), add]), Route.on("events.get", [hasData(["stream"]), get])]);
-
-//#endregion

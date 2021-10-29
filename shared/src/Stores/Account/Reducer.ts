@@ -13,8 +13,6 @@ import { AccountUsernameSet } from "./Events/AccountUsernameSet";
  |--------------------------------------------------------------------------------
  */
 
-//#region
-
 export const reducer = new Reducer<Account>()
   .set(AccountCreated, (_, { data }) => {
     return {
@@ -49,5 +47,3 @@ export const reducer = new Reducer<Account>()
       status: "closed"
     };
   });
-
-//#endregion

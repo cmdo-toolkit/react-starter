@@ -10,8 +10,6 @@ import { wss } from "../Providers/WebSocketServer";
  |--------------------------------------------------------------------------------
  */
 
-//#region
-
 const token: Action<{ token: string }> = async function (socket, data) {
   try {
     socket.auth = await Auth.resolve(data.token);
@@ -21,16 +19,10 @@ const token: Action<{ token: string }> = async function (socket, data) {
   return this.respond();
 };
 
-//#endregion
-
 /*
  |--------------------------------------------------------------------------------
  | Register
  |--------------------------------------------------------------------------------
  */
 
-//#region
-
 wss.register([SocketRoute.on("auth.token", [hasData(["token"]), token])]);
-
-//#endregion

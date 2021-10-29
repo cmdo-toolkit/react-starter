@@ -6,7 +6,8 @@
   "scripts": {
     "start": "vite",
     "build": "tsc && vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "lint": "../node_modules/.bin/eslint 'src/**/*.ts' --fix"
   },
   "dependencies": {
     "animejs": "3.2.1",

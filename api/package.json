@@ -6,7 +6,7 @@
   },
   "scripts": {
     "start": "./node_modules/.bin/ts-node src/index.ts",
-    "lint": "../node_modules/.bin/eslint 'src/**/*.ts'"
+    "lint": "../node_modules/.bin/eslint 'src/**/*.ts' --fix"
   },
   "dependencies": {
     "chalk": "4.1.2",
