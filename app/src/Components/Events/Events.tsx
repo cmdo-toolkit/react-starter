@@ -35,7 +35,9 @@ export function Events() {
             ))
           ) : (
             <tr>
-              <td colSpan={2}>No Events</td>
+              <td colSpan={4} style={{ textAlign: "center" }}>
+                No events found
+              </td>
             </tr>
           )}
         </tbody>
