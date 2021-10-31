@@ -31,7 +31,9 @@ const leave: Action<{ stream: string }> = async function (socket, { stream }) {
  */
 
 store.on("saved", (descriptor) => {
-  wss.to(`stream:${descriptor.stream}`).emit("event", descriptor);
+  for (const stream of descriptor.streams) {
+    wss.to(`stream:${stream}`).emit("event", descriptor);
+  }
 });
 
 /*

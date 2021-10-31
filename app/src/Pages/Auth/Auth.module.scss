@@ -1,3 +1,5 @@
+@import "../../Styles/Variables";
+
 .container {
   display: flex;
   flex-direction: column;
@@ -15,7 +17,35 @@
     margin-bottom: 20px;
   }
 
+  input {
+    background-color: transparent;
+
+    border: 1px solid #ccc;
+    border-radius: 6px;
+
+    font-size: 16px;
+
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    padding: 16px 13px;
+    width: 100%;
+  }
+
   button {
+    background-color: $color-primary;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 15px;
+
+    min-width: 180px;
+    padding: 16px;
+
+    &:hover {
+      background-color: $color-primary-dark;
+      cursor: pointer;
+    }
+
     width: 100%;
   }
 }

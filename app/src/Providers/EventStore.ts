@@ -5,14 +5,16 @@ import { Event, events } from "shared";
 import { collections } from "../Data/Collections";
 
 export const store = new (class MingoEventStore extends Store<Event> {
-  public async insert({ id, stream, event }: Descriptor) {
+  public async insert({ id, streams, event }: Descriptor) {
     const count = await collections.events.count({
-      stream,
+      streams: {
+        $in: streams
+      },
       "event.data.id": event.data.id,
       "event.meta.created": event.meta.created
     });
     if (count === 0) {
-      return collections.events.insert({ id, stream, event });
+      return collections.events.insert({ id, streams, event });
     }
   }
 
@@ -22,9 +24,11 @@ export const store = new (class MingoEventStore extends Store<Event> {
     });
   }
 
-  public async outdated({ stream, event }: Descriptor) {
+  public async outdated({ streams, event }: Descriptor) {
     const count = await collections.events.count({
-      stream,
+      streams: {
+        $in: streams
+      },
       "event.type": event.type,
       "event.data.id": event.data.id,
       "event.meta.created": {
@@ -34,8 +38,8 @@ export const store = new (class MingoEventStore extends Store<Event> {
     return count > 0;
   }
 
-  public descriptor(stream: string, event: Event): Descriptor {
-    return { id: nanoid(), stream, event: event.toJSON() };
+  public descriptor(streams: string[], event: Event): Descriptor {
+    return { id: nanoid(), streams, event: event.toJSON() };
   }
 })(events);
 

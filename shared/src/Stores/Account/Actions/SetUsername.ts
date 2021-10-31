@@ -12,5 +12,5 @@ export const setUsername = action<Pick<Account, "id" | "username">>(async functi
   if (account.username === data.username) {
     throw new Error("Username already set");
   }
-  await store.save(data.id, new AccountUsernameSet(data));
+  await store.save([`account-${data.id}`], new AccountUsernameSet(data));
 });

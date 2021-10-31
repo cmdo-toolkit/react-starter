@@ -12,5 +12,5 @@ export const close = action<Pick<Account, "id">>(async function (data, { store }
   if (account.status === "closed") {
     throw new Error("Account is already closed");
   }
-  await store.save(data.id, new AccountClosed(data));
+  await store.save([`account-${data.id}`], new AccountClosed(data));
 });

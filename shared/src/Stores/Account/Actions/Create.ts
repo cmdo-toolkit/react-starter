@@ -9,5 +9,5 @@ export const create = action<Pick<Account, "id" | "email">>(async function (data
   if (account) {
     throw new Error("Account already exists");
   }
-  await store.save(data.id, new AccountCreated(data));
+  await store.save([`account-${data.id}`], new AccountCreated(data));
 });

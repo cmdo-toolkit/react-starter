@@ -12,5 +12,5 @@ export const setEmail = action<Pick<Account, "id" | "email">>(async function (da
   if (account.email === data.email) {
     throw new Error("Email already set");
   }
-  await store.save(data.id, new AccountEmailSet(data));
+  await store.save([`account-${data.id}`], new AccountEmailSet(data));
 });

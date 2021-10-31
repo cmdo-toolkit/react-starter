@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "cmdo-auth": "1.0.0-rc8",
-    "cmdo-events": "3.0.0-rc14"
+    "cmdo-events": "3.0.0-rc15"
   },
   "devDependencies": {
     "@types/jest": "27.0.2",

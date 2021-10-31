@@ -12,5 +12,5 @@ export const activate = action<Pick<Account, "id">>(async function (data, { stor
   if (account.status === "active") {
     throw new Error("Account is already active");
   }
-  await store.save(data.id, new AccountActivated(data));
+  await store.save([`account-${data.id}`], new AccountActivated(data));
 });

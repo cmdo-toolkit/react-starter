@@ -7,10 +7,14 @@ import { mongo } from "../Lib/Mongo";
 export const store = new (class MongoEventStore extends Store<Event> {
   public readonly collection = mongo.collection<Descriptor>("events");
 
-  public async insert({ id, stream, event }: Descriptor) {
-    const isDuplicate = await this.collection.count({ stream, "event.meta.created": event.meta.created });
+  public async insert({ id, streams, event }: Descriptor) {
+    const isDuplicate = await this.collection.count({
+      streams: { $in: streams },
+      "event.data.id": event.data.id,
+      "event.meta.created": event.meta.created
+    });
     if (!isDuplicate) {
-      return this.collection.insertOne({ id, stream, event });
+      return this.collection.insertOne({ id, streams, event });
     }
   }
 
@@ -26,9 +30,11 @@ export const store = new (class MongoEventStore extends Store<Event> {
       });
   }
 
-  public async outdated({ stream, event }: Descriptor) {
+  public async outdated({ streams, event }: Descriptor) {
     const count = await this.collection.count({
-      stream,
+      streams: {
+        $in: streams
+      },
       "event.type": event.type,
       "event.data.id": event.data.id,
       "event.meta.created": {
@@ -38,10 +44,10 @@ export const store = new (class MongoEventStore extends Store<Event> {
     return count > 0;
   }
 
-  public descriptor(stream: string, event: Event): Descriptor {
+  public descriptor(streams: string[], event: Event): Descriptor {
     return {
       id: nanoid(),
-      stream,
+      streams,
       event: event.toJSON()
     };
   }

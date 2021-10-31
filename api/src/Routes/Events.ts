@@ -16,7 +16,9 @@ const add: Action<Descriptor> = async function (socket, descriptor) {
   // if (!permission.granted) {
   //   return this.reject("You are not authorized to add this event to the stream");
   // }
-  socket.to(`stream:${descriptor.stream}`).emit("event", await store.add(descriptor));
+  for (const stream of descriptor.streams) {
+    socket.to(`stream:${stream}`).emit("event", await store.add(descriptor));
+  }
   return this.respond();
 };
 
@@ -40,4 +42,4 @@ const get: Action<{ stream: string; checkpoint?: string }> = async function (soc
  |--------------------------------------------------------------------------------
  */
 
-wss.register([Route.on("events.add", [hasData(["id", "stream", "event"]), add]), Route.on("events.get", [hasData(["stream"]), get])]);
+wss.register([Route.on("events.add", [hasData(["id", "streams", "event"]), add]), Route.on("events.get", [hasData(["stream"]), get])]);

@@ -6,13 +6,13 @@ import { store } from "../../Providers/EventStore";
 export class Event extends Model<Descriptor> {
   public static readonly $collection = "events";
 
-  public readonly stream: Descriptor["stream"];
+  public readonly streams: Descriptor["streams"];
   public readonly event: Descriptor["event"];
 
   constructor(document: Descriptor) {
     super(document);
 
-    this.stream = document.stream;
+    this.streams = document.streams;
     this.event = document.event;
 
     Object.freeze(this);
@@ -24,7 +24,7 @@ export class Event extends Model<Descriptor> {
 
   public toJSON(): Descriptor {
     return super.toJSON({
-      stream: this.stream,
+      streams: this.streams,
       event: this.event
     });
   }
