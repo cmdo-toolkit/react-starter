@@ -16,24 +16,27 @@ const add: Action<Descriptor> = async function (socket, descriptor) {
   // if (!permission.granted) {
   //   return this.reject("You are not authorized to add this event to the stream");
   // }
-  for (const stream of descriptor.streams) {
-    socket.to(`stream:${stream}`).emit("event", await store.add(descriptor));
+  const inserted = await store.add(descriptor);
+  if (inserted) {
+    for (const stream of descriptor.streams) {
+      socket.to(`stream:${stream}`).emit("event", inserted);
+    }
   }
   return this.respond();
 };
 
-const get: Action<{ stream: string; checkpoint?: string }> = async function (socket, { stream, checkpoint }) {
+const get: Action<{ stream: string; checkpoint?: string }> = async function (_, { stream, checkpoint }) {
   // const permission = socket.auth.access.get(stream).can("get", "events");
   // if (!permission.granted) {
   //   return this.reject("You are not authorized to get events on this stream");
   // }
-  const filter: any = { stream };
+  const filter: any = { streams: stream };
   if (checkpoint) {
-    filter["event.meta.localId"] = {
+    filter["event.meta.revised"] = {
       $gt: checkpoint
     };
   }
-  return this.respond(await store.collection.find(filter).sort({ "event.meta.localId": 1 }).toArray());
+  return this.respond(await store.collection.find(filter).sort({ "event.meta.revised": 1 }).toArray());
 };
 
 /*
