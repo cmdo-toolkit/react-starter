@@ -6,18 +6,14 @@ import { useStream } from "../../Hooks/UseStream";
 import s from "./Home.module.scss";
 
 export function Home(): JSX.Element | null {
-  const { status, error } = useStream("toolkit");
+  const { loading, error } = useStream("toolkit");
 
-  if (status === "error") {
+  if (error) {
     return <div>Something went wrong: {error}</div>;
   }
 
-  if (status === "pending") {
-    return <div>Connecting to stream</div>;
-  }
-
-  if (status === "hydrating") {
-    return <div>Syncing with stream</div>;
+  if (loading) {
+    return <div>Loading...</div>;
   }
 
   return (
