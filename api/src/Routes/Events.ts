@@ -1,6 +1,7 @@
 import { Descriptor } from "cmdo-events";
 import { Action, Route } from "cmdo-socket";
 
+import { collection } from "../Data/Collections";
 import { hasData } from "../Policies/hasData";
 import { store } from "../Providers/EventStore";
 import { wss } from "../Providers/WebSocketServer";
@@ -36,7 +37,7 @@ const get: Action<{ stream: string; checkpoint?: string }> = async function (_, 
       $gt: checkpoint
     };
   }
-  return this.respond(await store.collection.find(filter).sort({ "event.meta.revised": 1 }).toArray());
+  return this.respond(await collection.events.find(filter).sort({ "event.meta.revised": 1 }).toArray());
 };
 
 /*

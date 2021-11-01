@@ -1,4 +1,5 @@
 import { config } from "./Config";
+import { loadCollections } from "./Data/Collections";
 import { mongo } from "./Lib/Mongo";
 import { hts } from "./Providers/HttpServer";
 import { wss } from "./Providers/WebSocketServer";
@@ -29,6 +30,7 @@ import { wss } from "./Providers/WebSocketServer";
 
 async function database(): Promise<void> {
   await mongo.connect();
+  await loadCollections();
 }
 
 /*
