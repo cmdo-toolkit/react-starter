@@ -54,7 +54,7 @@ export class Streams implements Service {
 
   public async join(stream: string) {
     return this.socket
-      .post("streams.join", { stream })
+      .send("streams.join", { stream })
       .then(() => {
         debug("joined %s", stream);
         this.streams.add(stream);
@@ -66,7 +66,7 @@ export class Streams implements Service {
   }
 
   public async leave(stream: string) {
-    return this.socket.post("streams.leave", { stream }).then(() => {
+    return this.socket.send("streams.leave", { stream }).then(() => {
       debug("left %s", stream);
       this.streams.delete(stream);
       return this;

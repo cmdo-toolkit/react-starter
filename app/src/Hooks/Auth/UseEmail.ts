@@ -23,7 +23,7 @@ export function useEmail(dispatch: AuthDispatch): [State, Actions] {
         if (email === "") {
           return alert("ENTER AN EMAIL");
         }
-        socket.post("account.token", { email });
+        socket.send("account.token", { email });
         dispatch({ type: "SHOW_PIN", email });
       }
     }

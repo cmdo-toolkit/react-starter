@@ -44,7 +44,7 @@ export class Channels implements Service {
 
   public async join(channelId: string) {
     return this.socket
-      .post("channels.join", { channelId })
+      .send("channels.join", { channelId })
       .then(() => {
         debug("joined %s", channelId);
         this.channels.add(channelId);
@@ -56,7 +56,7 @@ export class Channels implements Service {
   }
 
   public async leave(channelId: string) {
-    return this.socket.post("channels.leave", { channelId }).then(() => {
+    return this.socket.send("channels.leave", { channelId }).then(() => {
       debug("left %s", channelId);
       this.channels.delete(channelId);
       return this;

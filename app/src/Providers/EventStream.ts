@@ -26,7 +26,7 @@ export class EventStream extends Stream {
   }
 
   public async getEvents(): Promise<Descriptor[]> {
-    return socket.post("events.get", { stream: this.name, checkpoint: await this.getCheckpoint() });
+    return socket.send("events.get", { stream: this.name, checkpoint: await this.getCheckpoint() });
   }
 
   public async setCheckpoint(value: string): Promise<void> {
@@ -62,7 +62,7 @@ socket.on("event", (descriptor) => {
 
 store.on("saved", (descriptor) => {
   EventStream.push(descriptor);
-  socket.post("events.add", descriptor);
+  socket.send("events.add", descriptor);
 });
 
 socket.on("disconnected", () => {
