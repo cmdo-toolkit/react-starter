@@ -19,7 +19,7 @@ async function dependencies(): Promise<void> {
 }
 
 async function event() {
-  await Promise.all([import("./Data/Projections/User")]);
+  await Promise.all([import("./Projections/User")]);
 }
 
 async function routes() {

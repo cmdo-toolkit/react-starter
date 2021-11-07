@@ -1,7 +1,7 @@
 import { Model } from "cmdo-db";
 import { Descriptor } from "cmdo-events";
 
-import { store } from "../../Providers/EventStore";
+import { store } from "../Providers/EventStore";
 
 export class Event extends Model<Descriptor> {
   public static readonly $collection = "events";

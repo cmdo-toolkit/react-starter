@@ -1,6 +1,6 @@
 import type { Options as QueryOptions } from "cmdo-db";
 
-import { collections } from "../Data/Collections";
+import { collections } from "../Collections";
 
 export type RecordMap<T> = {
   [P in keyof T]: T[P];

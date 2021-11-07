@@ -4,7 +4,7 @@
     "type": "replica"
   },
   "scripts": {
-    "start": "vite",
+    "start": "rm -rf ./node_modules/.vite && vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
     "lint": "../node_modules/.bin/eslint 'src/**/*.ts' --fix"

@@ -1,4 +1,4 @@
-import { Collection, collections } from "../Data/Collections";
+import { Collection, collections } from "../Collections";
 import type { Options } from "../Types/Query";
 
 export function resolveOne(key: Collection, { filter, observe = true }: Options, setData: React.Dispatch<any>) {

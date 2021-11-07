@@ -2,7 +2,7 @@ import { container, Descriptor, Store } from "cmdo-events";
 import { nanoid } from "nanoid";
 import { Event, events } from "shared";
 
-import { collections } from "../Data/Collections";
+import { collections } from "../Collections";
 
 export const store = new (class MingoEventStore extends Store<Event> {
   public async insert({ id, streams, event }: Descriptor) {

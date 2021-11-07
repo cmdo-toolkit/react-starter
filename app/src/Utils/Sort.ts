@@ -1,4 +1,4 @@
-import { Event } from "../Data/Models/Event";
+import { Event } from "../Models/Event";
 
 export function byLocalId(a: Event, b: Event): number {
   if (a.event.meta.revised > b.event.meta.revised) {

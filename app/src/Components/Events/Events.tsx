@@ -2,8 +2,8 @@ import { getDate } from "cmdo-events";
 import { format } from "date-fns";
 import React, { useState } from "react";
 
-import { Event } from "../../Data/Models/Event";
 import { useQuery } from "../../Hooks/UseQuery";
+import { Event } from "../../Models/Event";
 import s from "./Events.module.scss";
 
 export function Events() {
