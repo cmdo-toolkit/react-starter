@@ -3,14 +3,15 @@ import { action } from "cmdo-events";
 import { Data, UserCreated } from "../Events/UserCreated";
 import { reducer } from "../Reducer";
 
-export const create = action<Data>(async function (data, { store }) {
-  // const permission = auth.access.get(streamId).can("create", "user");
+export const create = action<Data>(async function (data, { streams }) {
+  const stream = streams.get(`toolkit-user-${data.id}`);
+  // const permission = auth.access.get(stream.name).can("create", "user");
   // if (!permission.granted) {
   //   throw new Error(permission.message);
   // }
-  const user = await store.reduce(reducer, { "event.data.id": data.id });
+  const user = await stream.reduce(reducer);
   if (user) {
     throw new Error("User already exists");
   }
-  await store.save(["toolkit", `toolkit-user-${data.id}`], new UserCreated(data));
+  await stream.save(new UserCreated(data));
 });

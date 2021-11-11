@@ -1,7 +1,6 @@
 import { Action, Route } from "cmdo-socket";
 
 import { hasData } from "../Policies/hasData";
-import { store } from "../Providers/EventStore";
 import { wss } from "../Providers/WebSocketServer";
 
 /*
@@ -30,11 +29,11 @@ const leave: Action<{ stream: string }> = async function (socket, { stream }) {
  |--------------------------------------------------------------------------------
  */
 
-store.on("saved", (descriptor) => {
-  for (const stream of descriptor.streams) {
-    wss.to(`stream:${stream}`).emit("event", descriptor);
-  }
-});
+// store.on("saved", (descriptor) => {
+//   for (const stream of descriptor.streams) {
+//     wss.to(`stream:${stream}`).emit("event", descriptor);
+//   }
+// });
 
 /*
  |--------------------------------------------------------------------------------

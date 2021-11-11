@@ -4,6 +4,7 @@ import React from "react";
 import { stores } from "shared";
 
 import { useQuery } from "../../Hooks/UseQuery";
+import { useStream } from "../../Hooks/UseStream";
 import s from "./Users.module.scss";
 
 export function Users() {
@@ -24,19 +25,26 @@ export function Users() {
         </thead>
         <tbody>
           {users.map((user) => (
-            <tr key={user.id} style={{ marginBottom: 20 }}>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
-              <td>
-                <button onClick={() => user.remove()}>Delete</button>
-                <button onClick={() => user.setName(faker.name.firstName())}>Change Name</button>
-                <button onClick={() => user.setEmail(faker.internet.email())}>Change Email</button>
-              </td>
-            </tr>
+            <User key={user.id} user={user} />
           ))}
         </tbody>
       </table>
     </div>
+  );
+}
+
+function User({ user }: any) {
+  useStream(`toolkit-user-${user.id}`);
+  return (
+    <tr style={{ marginBottom: 20 }}>
+      <td>{user.name}</td>
+      <td>{user.email}</td>
+      <td>
+        <button onClick={() => user.remove()}>Delete</button>
+        <button onClick={() => user.setName(faker.name.firstName())}>Change Name</button>
+        <button onClick={() => user.setEmail(faker.internet.email())}>Change Email</button>
+      </td>
+    </tr>
   );
 }
 

@@ -4,13 +4,14 @@ import { Account } from "../Aggregate";
 import { AccountActivated } from "../Events/AccountActivated";
 import { reducer } from "../Reducer";
 
-export const activate = action<Pick<Account, "id">>(async function (data, { store }) {
-  const account = await store.reduce(reducer, { "event.data.id": data.id });
+export const activate = action<Pick<Account, "id">>(async function (data, { streams }) {
+  const stream = streams.get(`account-${data.id}`);
+  const account = await stream.reduce(reducer);
   if (!account) {
     throw new Error("Account not found");
   }
   if (account.status === "active") {
     throw new Error("Account is already active");
   }
-  await store.save([`account-${data.id}`], new AccountActivated(data));
+  await stream.save(new AccountActivated(data));
 });

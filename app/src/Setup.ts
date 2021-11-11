@@ -1,7 +1,5 @@
 import { socket } from "./Providers/Socket";
 
-socket.connect();
-
 /*
  |--------------------------------------------------------------------------------
  | Setup
@@ -9,13 +7,14 @@ socket.connect();
  */
 
 export async function setup(): Promise<void> {
+  await socket.connect();
   await dependencies();
   await event();
   await routes();
 }
 
 async function dependencies(): Promise<void> {
-  await Promise.all([import("./Providers/AccessStore"), import("./Providers/EventStore")]);
+  await Promise.all([import("./Providers/AccessStore"), import("./Providers/EventNetwork"), import("./Providers/EventStore")]);
 }
 
 async function event() {

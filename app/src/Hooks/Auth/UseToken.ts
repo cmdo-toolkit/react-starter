@@ -20,7 +20,7 @@ export function useToken(email: string): [InputsRef, Actions] {
     {
       submit() {
         socket
-          .post("account.validate", { email, token: data() })
+          .send("account.validate", { email, token: data() })
           .then(() => {
             localStorage.setItem("token", "faker");
             router.reload();

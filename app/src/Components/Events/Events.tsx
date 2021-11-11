@@ -17,19 +17,17 @@ export function Events() {
           <tr>
             <th>Type</th>
             <th>Data</th>
-            <th>Revised</th>
             <th>Created</th>
           </tr>
         </thead>
         <tbody>
           {events.length > 0 ? (
-            events.map(({ id, event }) => (
-              <tr key={id}>
+            events.map(({ event }) => (
+              <tr key={event.hash}>
                 <td>{event.type}</td>
                 <td>
                   <pre>{JSON.stringify(event.data, null, 2)}</pre>
                 </td>
-                <td>{format(getDate(event.meta.revised), "d-MM-Y H:m:ssS")}</td>
                 <td>{format(getDate(event.meta.created), "d-MM-Y H:m:ssS")}</td>
               </tr>
             ))

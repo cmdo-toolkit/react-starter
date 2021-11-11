@@ -1,38 +1,39 @@
-import { container, Descriptor, Store } from "cmdo-events";
-import { nanoid } from "nanoid";
+import { container, EventDescriptor, EventStore } from "cmdo-events";
 import { Event, events } from "shared";
 
 import { collection } from "../Data/Collections";
 
-export const store = new (class MongoEventStore extends Store<Event> {
-  public async insert({ id, streams, event }: Descriptor) {
-    const isDuplicate = await collection.events.count({
-      streams: { $in: streams },
-      "event.data.id": event.data.id,
-      "event.meta.created": event.meta.created
-    });
-    if (!isDuplicate) {
-      return collection.events.insertOne({ id, streams, event });
+export const store = new (class MongoEventStore extends EventStore<Event> {
+  public async append(descriptor: EventDescriptor) {
+    if (await collection.events.findOne({ stream: descriptor.stream, "event.hash": descriptor.event.hash })) {
+      return descriptor;
+    }
+    await collection.events.insertOne({ ...descriptor });
+    return descriptor;
+  }
+
+  public async getByStream(stream: string, cursor?: string, direction: -1 | 1 = 1): Promise<EventDescriptor[]> {
+    const filter: any = { stream };
+    if (cursor) {
+      filter.event = {
+        hash: {
+          [direction === 1 ? "$gt" : "$lt"]: cursor
+        }
+      };
+    }
+    return collection.events.find(filter, { sort: [["event.meta.created", 1]] }).toArray();
+  }
+
+  public async getLastEventByStream(stream: string): Promise<EventDescriptor | undefined> {
+    const descriptor = await collection.events.findOne({ stream }, { sort: [["event.meta.created", -1]] });
+    if (descriptor) {
+      return descriptor;
     }
   }
 
-  public async find(filter: any): Promise<Event[]> {
-    return collection.events
-      .find(filter)
-      .sort({
-        "event.meta.created": 1
-      })
-      .toArray()
-      .then((events) => {
-        return events.map((descriptor) => this.toEvent(descriptor));
-      });
-  }
-
-  public async outdated({ streams, event }: Descriptor) {
+  public async outdated({ stream, event }: EventDescriptor) {
     const count = await collection.events.count({
-      streams: {
-        $in: streams
-      },
+      stream,
       "event.type": event.type,
       "event.data.id": event.data.id,
       "event.meta.created": {
@@ -41,14 +42,6 @@ export const store = new (class MongoEventStore extends Store<Event> {
     });
     return count > 0;
   }
-
-  public descriptor(streams: string[], event: Event): Descriptor {
-    return {
-      id: nanoid(),
-      streams,
-      event: event.toJSON()
-    };
-  }
 })(events);
 
-container.set("Store", store);
+container.set("EventStore", store);

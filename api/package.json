@@ -5,7 +5,7 @@
     "type": "replica"
   },
   "scripts": {
-    "start": "./node_modules/.bin/ts-node src/index.ts",
+    "start": "./node_modules/.bin/ts-node-dev src/index.ts",
     "lint": "../node_modules/.bin/eslint 'src/**/*.ts' --fix"
   },
   "dependencies": {
@@ -26,6 +26,6 @@
     "@types/jsonwebtoken": "8.5.5",
     "@types/mongodb": "4.0.6",
     "@types/node": "16.11.6",
-    "ts-node": "10.4.0"
+    "ts-node-dev": "1.1.8"
   }
 }
