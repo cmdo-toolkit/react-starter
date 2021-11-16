@@ -1,7 +1,7 @@
 import { EventDescriptor, Stream } from "cmdo-events";
 import { Action, Route } from "cmdo-socket";
 
-import { collection } from "../Data/Collections";
+import { collection } from "../Collections";
 import { hasData } from "../Policies/hasData";
 import { wss } from "../Providers/WebSocketServer";
 

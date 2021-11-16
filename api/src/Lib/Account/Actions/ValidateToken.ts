@@ -1,5 +1,5 @@
 import { Action } from "cmdo-socket";
-import { stores } from "shared";
+import { stores } from "stores";
 
 import { Account } from "../Account";
 

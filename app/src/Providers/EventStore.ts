@@ -1,6 +1,6 @@
 import { container, EventDescriptor, EventStore } from "cmdo-events";
 import { nanoid } from "nanoid";
-import { Event, events } from "shared";
+import { Event, events } from "stores";
 
 import { collections } from "../Collections";
 
@@ -8,7 +8,7 @@ container.set(
   "EventStore",
   new (class MingoEventStore extends EventStore<Event> {
     public async append(descriptor: EventDescriptor) {
-      if (await collections.events.findOne({ stream: descriptor.stream, "event.hash": descriptor.event.hash })) {
+      if (await collections.events.findOne({ stream: descriptor.stream, hash: descriptor.hash })) {
         return descriptor;
       }
       return collections.events.insert({

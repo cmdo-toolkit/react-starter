@@ -1,0 +1,15 @@
+{
+  "name": "stores",
+  "private": true,
+  "main": "./cjs/index.js",
+  "module": "./esm/index.js",
+  "types": "./types/index.d.ts",
+  "scripts": {
+    "build": "npm run clean && npm run build:stores && npm run build:esm && npm run build:cjs",
+    "build:stores": "ts-node --project ./tsconfig-cjs.json ./build/stores.ts",
+    "build:esm": "tsc --project ./tsconfig.json && ts-node --project ./tsconfig-cjs.json ./build/esm.ts",
+    "build:cjs": "tsc --project ./tsconfig-cjs.json",
+    "clean": "rm -rf ./cjs ./esm ./types",
+    "lint": "eslint 'src/**/*.ts' --fix"
+  }
+}

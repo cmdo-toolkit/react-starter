@@ -1,5 +1,5 @@
+import { loadCollections } from "./Collections";
 import { config } from "./Config";
-import { loadCollections } from "./Data/Collections";
 import { mongo } from "./Lib/Mongo";
 import { hts } from "./Providers/HttpServer";
 import { wss } from "./Providers/WebSocketServer";

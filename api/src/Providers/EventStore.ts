@@ -1,14 +1,14 @@
 import { container, EventDescriptor, EventStore } from "cmdo-events";
-import { Event, events } from "shared";
+import { Event, events } from "stores";
 
-import { collection } from "../Data/Collections";
+import { collection } from "../Collections";
 
 export const store = new (class MongoEventStore extends EventStore<Event> {
   public async append(descriptor: EventDescriptor) {
-    if (await collection.events.findOne({ stream: descriptor.stream, "event.hash": descriptor.event.hash })) {
+    if (await collection.events.findOne({ stream: descriptor.stream, hash: descriptor.hash })) {
       return descriptor;
     }
-    await collection.events.insertOne({ ...descriptor });
+    await collection.events.insertOne(descriptor);
     return descriptor;
   }
 

@@ -1,6 +1,6 @@
 import { Action, Route } from "cmdo-socket";
 import { nanoid } from "nanoid";
-import { stores } from "shared";
+import { stores } from "stores";
 
 import { hasData } from "../Policies/hasData";
 import { wss } from "../Providers/WebSocketServer";

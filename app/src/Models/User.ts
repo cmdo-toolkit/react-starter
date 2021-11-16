@@ -1,5 +1,5 @@
 import { Document, Model } from "cmdo-db";
-import { stores } from "shared";
+import { stores } from "stores";
 
 type Attributes = Document & {
   name: string;

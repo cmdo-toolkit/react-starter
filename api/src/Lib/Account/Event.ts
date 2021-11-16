@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-import { stores } from "shared";
+import { stores } from "stores";
 
 import { EventEmitter } from "../EventEmitter";
 import { Attributes } from "./Attributes";

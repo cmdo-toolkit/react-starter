@@ -1,5 +1,5 @@
 import { projection } from "cmdo-events";
-import { UserCreated, UserEmailSet, UserNameSet, UserRemoved } from "shared";
+import { UserCreated, UserEmailSet, UserNameSet, UserRemoved } from "stores";
 
 import { collections } from "../Collections";
 

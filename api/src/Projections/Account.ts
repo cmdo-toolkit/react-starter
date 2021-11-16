@@ -1,5 +1,5 @@
 import { projection } from "cmdo-events";
-import { AccountActivated, AccountClosed, AccountCreated } from "shared";
+import { AccountActivated, AccountClosed, AccountCreated } from "stores";
 
 import { Attributes } from "../Lib/Account";
 import { event } from "../Lib/Account/Event";

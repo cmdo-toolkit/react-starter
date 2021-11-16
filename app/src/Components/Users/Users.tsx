@@ -1,7 +1,7 @@
 import * as faker from "faker";
 import { nanoid } from "nanoid";
 import React from "react";
-import { stores } from "shared";
+import { stores } from "stores";
 
 import { useQuery } from "../../Hooks/UseQuery";
 import { useStream } from "../../Hooks/UseStream";
