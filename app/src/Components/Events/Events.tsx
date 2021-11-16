@@ -22,8 +22,8 @@ export function Events() {
         </thead>
         <tbody>
           {events.length > 0 ? (
-            events.map(({ event }) => (
-              <tr key={event.hash}>
+            events.map(({ event, hash }) => (
+              <tr key={hash}>
                 <td>{event.type}</td>
                 <td>
                   <pre>{JSON.stringify(event.data, null, 2)}</pre>
