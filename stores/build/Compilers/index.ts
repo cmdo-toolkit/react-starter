@@ -2,7 +2,6 @@ import * as fs from "fs";
 import * as path from "path";
 
 import { getEventExports, getEventImports, getEvents } from "./Events";
-import { store } from "./Store";
 
 /*
  |--------------------------------------------------------------------------------
@@ -11,14 +10,8 @@ import { store } from "./Store";
  */
 
 export async function stores(cwd: string) {
-  const src = path.resolve(cwd, "Stores");
-  const events = await getEvents(src, src);
-  const stores = await getStores(src);
-  for (const [key, path] of stores) {
-    await store(key, path);
-  }
-
-  await writeStores(src, events, stores);
+  const src = path.resolve(cwd);
+  await writeStores(src, await getEvents(src, src), await getStores(src));
 }
 
 /*
@@ -52,14 +45,14 @@ async function writeStores(src: string, events: any, stores: Map<string, string>
 }
 
 function writeStoresMod(cwd: string, output: any) {
-  const index = fs.readFileSync(path.join(process.cwd(), "build/Templates/Stores/index"), "utf-8");
+  const index = fs.readFileSync(path.join(process.cwd(), "build/Templates/index"), "utf-8");
   fs.writeFileSync(path.resolve(cwd, "index.ts"), index.replace("$events", output.events).replace("$stores", output.stores));
 }
 
 function getStoresImports(src: string, stores: Map<string, string>) {
   let imports = "";
   for (const [store, path] of stores) {
-    imports += `import * as ${store.toLowerCase()} from "${path.replace(src, ".")}/store";\n`;
+    imports += `import * as ${store.toLowerCase()} from "${path.replace(src, ".")}/Actions";\n`;
   }
   return imports + "\n";
 }

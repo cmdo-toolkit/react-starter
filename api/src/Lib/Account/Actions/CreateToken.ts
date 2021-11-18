@@ -5,6 +5,9 @@ import { Account } from "../Account";
 export const createToken: Action<{ email: string }> = async function (_, { email }) {
   try {
     const account = await Account.getByEmailOrCreate(email);
+    if (!account) {
+      return this.reject("Failed to create account token!");
+    }
     await account.token.create("console");
     return this.respond();
   } catch (error) {

@@ -1,6 +1,8 @@
+import { nanoid } from "nanoid";
+import { stores } from "stores";
+
 import { mongo } from "../Mongo";
 import { Attributes, Status } from "./Attributes";
-import { event } from "./Event";
 import { Token } from "./Token";
 
 const COLLECTION_NAME = "accounts";
@@ -27,15 +29,8 @@ export class Account {
    */
 
   public static async create(email: string) {
-    return new Promise<Account>((resolve, reject) => {
-      event.create(email, (error, attributes) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(new Account(attributes));
-        }
-      });
-    });
+    await stores.account.create({ id: nanoid(), email });
+    return this.getByEmail(email);
   }
 
   public static async getByEmailOrCreate(email: string) {

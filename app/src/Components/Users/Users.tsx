@@ -34,7 +34,7 @@ export function Users() {
 }
 
 function User({ user }: any) {
-  useStream(`toolkit-user-${user.id}`);
+  useStream(user.id);
   return (
     <tr style={{ marginBottom: 20 }}>
       <td>{user.name}</td>

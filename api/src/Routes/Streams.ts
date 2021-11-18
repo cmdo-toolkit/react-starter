@@ -1,4 +1,4 @@
-import { EventDescriptor, Stream } from "cmdo-events";
+import { EventRecord, stream } from "cmdo-events";
 import { Action, Route } from "cmdo-socket";
 
 import { collection } from "../Collections";
@@ -11,46 +11,43 @@ import { wss } from "../Providers/WebSocketServer";
  |--------------------------------------------------------------------------------
  */
 
-const push: Action<{ descriptors: EventDescriptor[] }> = async function (socket, { descriptors }) {
+const push: Action<{ event: EventRecord }> = async function (socket, { event }) {
   // const permission = socket.auth.access.get(descriptor.stream).can("add", descriptor.event.type);
   // if (!permission.granted) {
   //   return this.reject("You are not authorized to add this event to the stream");
   // }
-  console.log(descriptors);
-  for (const descriptor of descriptors) {
-    const inserted = await Stream.append(descriptor);
-    if (inserted) {
-      socket.to(`stream:${descriptor.stream}`).emit("event", inserted);
-    }
+  const record = await stream.append(event);
+  if (record) {
+    socket.to(`stream:${event.data.id}`).emit("event", record);
   }
   return this.respond();
 };
 
-const pull: Action<{ stream: string; hash?: string }> = async function (_, { stream, hash }) {
+const pull: Action<{ id: string; hash?: string }> = async function (_, { id, hash }) {
   // const permission = socket.auth.access.get(stream).can("get", "events");
   // if (!permission.granted) {
   //   return this.reject("You are not authorized to get events on this stream");
   // }
-  const filter: any = { streams: stream };
+  const filter: any = { "data.id": id };
   if (hash) {
-    filter.hash = {
+    filter["hash.commit"] = {
       $gt: hash
     };
   }
-  return this.respond(await collection.events.find(filter).sort({ "event.meta.created": 1 }).toArray());
+  return this.respond(await collection.events.find(filter).sort({ "meta.timestamp": 1 }).toArray());
 };
 
-const join: Action<{ stream: string }> = async function (socket, { stream }) {
+const join: Action<{ id: string }> = async function (socket, { id }) {
   // const permission = socket.auth.access.get(stream).can("join", "stream");
   // if (!permission.granted) {
   //   return this.reject("You are not authorized to join this stream");
   // }
-  socket.join(`stream:${stream}`);
+  socket.join(`stream:${id}`);
   return this.respond();
 };
 
-const leave: Action<{ stream: string }> = async function (socket, { stream }) {
-  socket.leave(`stream:${stream}`);
+const leave: Action<{ id: string }> = async function (socket, { id }) {
+  socket.leave(`stream:${id}`);
   return this.respond();
 };
 
@@ -73,8 +70,8 @@ const leave: Action<{ stream: string }> = async function (socket, { stream }) {
  */
 
 wss.register([
-  Route.on("streams.push", [hasData(["descriptors"]), push]),
-  Route.on("streams.pull", [hasData(["stream"]), pull]),
-  Route.on("streams.join", [hasData(["stream"]), join]),
-  Route.on("streams.leave", [hasData(["stream"]), leave])
+  Route.on("streams.push", [hasData(["events"]), push]),
+  Route.on("streams.pull", [hasData(["id"]), pull]),
+  Route.on("streams.join", [hasData(["id"]), join]),
+  Route.on("streams.leave", [hasData(["id"]), leave])
 ]);

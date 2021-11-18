@@ -1,4 +1,4 @@
-import { container, EventDescriptor, EventNetwork, StreamNetworkHandler } from "cmdo-events";
+import { container, EventNetwork, EventRecord, StreamNetworkHandler } from "cmdo-events";
 
 import { socket } from "./Socket";
 
@@ -7,10 +7,11 @@ const streams: Record<string, StreamNetworkHandler> = {};
 container.set(
   "EventNetwork",
   new (class SocketEventNetwork implements EventNetwork {
-    public async push(descriptors: EventDescriptor[]): Promise<void> {
-      return socket.send("streams.push", { descriptors });
+    public async push(events: EventRecord[]): Promise<void> {
+      console.log("Push events", events);
+      return socket.send("streams.push", { events });
     }
-    public async pull(stream: string, hash?: string): Promise<EventDescriptor[]> {
+    public async pull(stream: string, hash?: string): Promise<EventRecord[]> {
       return socket.send("streams.pull", { stream, hash });
     }
     public subscribe(stream: string, handler: StreamNetworkHandler): void {

@@ -1,9 +1,9 @@
-import { EventDescriptor } from "cmdo-events";
+import type { EventRecord } from "cmdo-events";
 
 import { mongo } from "./Lib/Mongo";
 
 export const collection = {
-  events: mongo.collection<EventDescriptor>("events")
+  events: mongo.collection<EventRecord>("events")
 };
 
 export async function loadCollections() {
@@ -12,7 +12,7 @@ export async function loadCollections() {
 
 async function loadEventsIndexes() {
   await collection.events.createIndexes([
-    { name: "duplicate", key: { streams: 1, hash: 1 } },
-    { name: "outdated", key: { streams: 1, "event.type": 1, "event.data.id": 1, "event.meta.created": 1 } }
+    { name: "unique", key: { "data.id": 1, "hash.commit": 1 }, unique: true },
+    { name: "outdated", key: { type: 1, "data.id": 1, "meta.timestamp": 1 } }
   ]);
 }

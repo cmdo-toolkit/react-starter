@@ -1,4 +1,15 @@
-dist
+# Dependencies
+
 node_modules
-package-lock.json
-.DS_Store
+
+# Build Output
+
+/cjs
+/esm
+/types
+
+# Internals
+
+src/Stores/**/store.ts
+src/Stores/index.ts
+src/index.ts

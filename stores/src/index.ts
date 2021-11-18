@@ -2,18 +2,58 @@
 
 /*
 
-  CMDO Shared
+  Stores
 
-  The following is an auto generated mod.ts file which contains the results of
-  traversing the shared folder and outputting its resources depending on folder
+  The following is an auto generated index.ts file which contains the results of
+  traversing the stores folder and outputting its resources depending on folder
   and file naming structures.
-
-  See https://go.to/docs for more information.
 
   This file will override any manual changes made here, so no need to edit!
   
  */
 
-export * from "./Stores";
-export * from "./Stores/Account";
-export * from "./Stores/User";
+/*
+ |--------------------------------------------------------------------------------
+ | Events
+ |--------------------------------------------------------------------------------
+ */
+
+import { AccountCreated, AccountActivated, AccountUsernameSet, AccountEmailSet, AccountClosed } from "./Account/Events";
+import { UserCreated, UserEmailSet, UserNameSet, UserRemoved } from "./User/Events";
+
+export type Event =
+  | AccountCreated
+  | AccountActivated
+  | AccountUsernameSet
+  | AccountEmailSet
+  | AccountClosed
+  | UserCreated
+  | UserEmailSet
+  | UserNameSet
+  | UserRemoved;
+
+export {
+  AccountCreated,
+  AccountActivated,
+  AccountUsernameSet,
+  AccountEmailSet,
+  AccountClosed,
+  UserCreated,
+  UserEmailSet,
+  UserNameSet,
+  UserRemoved
+};
+
+/*
+ |--------------------------------------------------------------------------------
+ | Stores
+ |--------------------------------------------------------------------------------
+ */
+
+import * as account from "./Account/Actions";
+import * as user from "./User/Actions";
+
+export const stores = {
+  account,
+  user
+};

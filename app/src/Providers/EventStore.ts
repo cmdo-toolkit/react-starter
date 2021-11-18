@@ -1,48 +1,47 @@
-import { container, EventDescriptor, EventStore } from "cmdo-events";
+import { container, EventRecord, EventStore } from "cmdo-events";
 import { nanoid } from "nanoid";
-import { Event, events } from "stores";
 
 import { collections } from "../Collections";
 
 container.set(
   "EventStore",
-  new (class MingoEventStore extends EventStore<Event> {
-    public async append(descriptor: EventDescriptor) {
-      if (await collections.events.findOne({ stream: descriptor.stream, hash: descriptor.hash })) {
-        return descriptor;
+  new (class MingoEventStore implements EventStore {
+    public async append(event: EventRecord) {
+      console.log("Append event", event);
+      const record = await collections.events.findOne({ "data.id": event.data.id, "hash.commit": event.hash.commit });
+      if (record) {
+        console.log("has record", record);
+        return event;
       }
-      return collections.events.insert({
+      return await collections.events.insert({
         id: nanoid(),
-        ...descriptor
+        ...event
       });
     }
 
-    public async getByStream(stream: string, cursor?: string, direction: -1 | 1 = 1): Promise<EventDescriptor[]> {
-      const filter: any = { stream };
+    public async getByStream(stream: string, cursor?: string, direction: -1 | 1 = 1) {
+      const filter: any = { "data.id": stream };
       if (cursor) {
-        filter.event = {
-          hash: {
-            [direction === 1 ? "$gt" : "$lt"]: cursor
-          }
+        filter["hash.commit"] = {
+          [direction === 1 ? "$gt" : "$lt"]: cursor
         };
       }
-      return collections.events.find(filter, { sort: { "event.meta.created": 1 } });
+      return collections.events.find(filter, { sort: { "meta.timestamp": 1 } });
     }
 
-    public async getLastEventByStream(stream: string): Promise<EventDescriptor | undefined> {
-      return collections.events.findOne({ stream }, { sort: { "event.meta.created": -1 } });
+    public async getLastEventByStream(id: string) {
+      return collections.events.findOne({ "data.id": id }, { sort: { "meta.timestamp": -1 } });
     }
 
-    public async outdated({ stream, event }: EventDescriptor) {
+    public async outdated({ type, data: { id }, meta: { timestamp } }: EventRecord) {
       const count = await collections.events.count({
-        stream,
-        "event.type": event.type,
-        "event.data.id": event.data.id,
-        "event.meta.created": {
-          $gt: event.meta.created
+        type,
+        "data.id": id,
+        "meta.timestamp": {
+          $gt: timestamp
         }
       });
       return count > 0;
     }
-  })(events)
+  })()
 );
