@@ -17,18 +17,20 @@ export function Events() {
           <tr>
             <th>Type</th>
             <th>Data</th>
+            <th>Height</th>
             <th>Created</th>
           </tr>
         </thead>
         <tbody>
           {events.length > 0 ? (
-            events.map(({ type, data, meta: { timestamp }, hash: { commit } }) => (
+            events.map(({ type, data, date, height, commit }) => (
               <tr key={commit}>
                 <td>{type as string}</td>
                 <td>
                   <pre>{JSON.stringify(data, null, 2)}</pre>
                 </td>
-                <td>{format(getDate(timestamp), "d-MM-Y H:m:ssS")}</td>
+                <td>{height}</td>
+                <td>{format(getDate(date), "d-MM-Y H:m:ssS")}</td>
               </tr>
             ))
           ) : (
@@ -50,7 +52,7 @@ function useEventQuery(): [Event[], React.Dispatch<React.SetStateAction<string>>
     filter: {
       $or: [
         {
-          "data.id": {
+          streamId: {
             $regex: filter,
             $options: "i"
           }
@@ -70,7 +72,7 @@ function useEventQuery(): [Event[], React.Dispatch<React.SetStateAction<string>>
       ]
     },
     sort: {
-      "meta.timestamp": -1
+      date: -1
     }
   });
   return [events, setFilter];

@@ -18,7 +18,7 @@ const add: Action<EventRecord> = async function (socket, event) {
   // }
   const inserted = await stream.append(event);
   if (inserted) {
-    socket.to(`stream:${event.data.id}`).emit("event", inserted);
+    socket.to(`stream:${event.streamId}`).emit("event", inserted);
   }
   return this.respond();
 };

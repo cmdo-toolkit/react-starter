@@ -17,7 +17,7 @@ export const reducer = createReducer<Account, Event>(
     switch (event.type) {
       case "AccountCreated": {
         return {
-          id: event.data.id,
+          id: event.streamId,
           status: "onboarding",
           username: "",
           email: event.data.email,

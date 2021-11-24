@@ -11,14 +11,16 @@ import { wss } from "../Providers/WebSocketServer";
  |--------------------------------------------------------------------------------
  */
 
-const push: Action<{ event: EventRecord }> = async function (socket, { event }) {
+const push: Action<{ events: EventRecord[] }> = async function (socket, { events }) {
   // const permission = socket.auth.access.get(descriptor.stream).can("add", descriptor.event.type);
   // if (!permission.granted) {
   //   return this.reject("You are not authorized to add this event to the stream");
   // }
-  const record = await stream.append(event);
-  if (record) {
-    socket.to(`stream:${event.data.id}`).emit("event", record);
+  for (const event of events) {
+    const record = await stream.append(event);
+    if (record) {
+      socket.to(`stream:${event.streamId}`).emit("event", record);
+    }
   }
   return this.respond();
 };

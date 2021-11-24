@@ -1,61 +1,61 @@
 import { action } from "cmdo-events";
 
-import { AccountActivated, AccountClosed, AccountCreated, AccountEmailSet, AccountUsernameSet } from "./Events";
-import { event } from "./Factories";
+import { Account } from "./Aggregate";
+import { account } from "./Factories";
 import { reducer } from "./Reducer";
 
-export const create = action<AccountCreated["data"]>(async function (data, { append, reduce }) {
+export const create = action<Pick<Account, "id" | "email">>(async function ({ id, email }, { reduce, save }) {
   try {
-    const account = await reduce(data.id, reducer);
-    if (account) {
+    const state = await reduce(id, reducer);
+    if (state) {
       throw new Error("Account already exists");
     }
-    await append(event.created(data));
+    await save(account.created(id, { email }));
   } catch (error) {
     console.log("Failed to created account", error);
   }
 });
 
-export const activate = action<AccountActivated["data"]>(async function (data, { append, reduce }) {
-  const account = await reduce(data.id, reducer);
-  if (!account) {
+export const activate = action<Pick<Account, "id">>(async function ({ id }, { reduce, save }) {
+  const state = await reduce(id, reducer);
+  if (!state) {
     throw new Error("Account not found");
   }
-  if (account.status === "active") {
+  if (state.status === "active") {
     throw new Error("Account is already active");
   }
-  await append(event.activated(data));
+  await save(account.activated(id));
 });
 
-export const setEmail = action<AccountEmailSet["data"]>(async function (data, { append, reduce }) {
-  const account = await reduce(data.id, reducer);
-  if (!account) {
+export const setEmail = action<Pick<Account, "id" | "email">>(async function ({ id, email }, { reduce, save }) {
+  const state = await reduce(id, reducer);
+  if (!state) {
     throw new Error("Account not found");
   }
-  if (account.email === data.email) {
+  if (state.email === email) {
     throw new Error("Email already set");
   }
-  await append(event.emailSet(data));
+  await save(account.emailSet(id, { email }));
 });
 
-export const setUsername = action<AccountUsernameSet["data"]>(async function (data, { append, reduce }) {
-  const account = await reduce(data.id, reducer);
-  if (!account) {
+export const setUsername = action<Pick<Account, "id" | "username">>(async function ({ id, username }, { reduce, save }) {
+  const state = await reduce(id, reducer);
+  if (!state) {
     throw new Error("Account not found");
   }
-  if (account.username === data.username) {
+  if (state.username === username) {
     throw new Error("Username already set");
   }
-  await append(event.usernameSet(data));
+  await save(account.usernameSet(id, { username }));
 });
 
-export const close = action<AccountClosed["data"]>(async function (data, { append, reduce }) {
-  const account = await reduce(data.id, reducer);
-  if (!account) {
+export const close = action<Pick<Account, "id">>(async function ({ id }, { reduce, save }) {
+  const state = await reduce(id, reducer);
+  if (!state) {
     throw new Error("Account not found");
   }
-  if (account.status === "closed") {
+  if (state.status === "closed") {
     throw new Error("Account is already closed");
   }
-  await append(event.closed(data));
+  await save(account.closed(id));
 });

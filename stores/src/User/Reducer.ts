@@ -15,7 +15,7 @@ export const reducer = createReducer<User, Event>(
     switch (event.type) {
       case "UserCreated": {
         return {
-          id: event.data.id,
+          id: event.streamId,
           name: event.data.name,
           email: event.data.email
         };

@@ -6,7 +6,10 @@ const streams: Record<string, StreamNetworkHandler> = {};
 
 container.set(
   "EventNetwork",
-  new (class SocketEventNetwork implements EventNetwork {
+  new (class SocketEventNetwork extends EventNetwork {
+    public async validate(): Promise<boolean> {
+      return true;
+    }
     public async push(events: EventRecord[]): Promise<void> {
       console.log("Push events", events);
       return socket.send("streams.push", { events });

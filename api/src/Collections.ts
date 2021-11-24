@@ -12,7 +12,8 @@ export async function loadCollections() {
 
 async function loadEventsIndexes() {
   await collection.events.createIndexes([
-    { name: "unique", key: { "data.id": 1, "hash.commit": 1 }, unique: true },
-    { name: "outdated", key: { type: 1, "data.id": 1, "meta.timestamp": 1 } }
+    { name: "height", key: { streamId: 1, height: 1 }, unique: true },
+    { name: "commit", key: { streamId: 1, commit: 1 }, unique: true },
+    { name: "outdated", key: { streamId: 1, type: 1, date: 1 } }
   ]);
 }

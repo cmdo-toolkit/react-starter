@@ -4,9 +4,9 @@ import type { AccountActivated, AccountClosed, AccountCreated } from "stores";
 import { Attributes } from "../Lib/Account";
 import { mongo } from "../Lib/Mongo";
 
-projection.on<AccountCreated>("AccountCreated", async ({ data: { id, email } }) => {
+projection.on<AccountCreated>("AccountCreated", async ({ streamId, data: { email } }) => {
   await mongo.collection<Attributes>("accounts").insertOne({
-    id,
+    id: streamId,
     status: "onboarding",
     username: "",
     email,
@@ -14,10 +14,10 @@ projection.on<AccountCreated>("AccountCreated", async ({ data: { id, email } }) 
   });
 });
 
-projection.on<AccountActivated>("AccountActivated", async ({ data: { id } }) => {
-  await mongo.collection<Attributes>("accounts").updateOne({ id }, { $set: { status: "active" } });
+projection.on<AccountActivated>("AccountActivated", async ({ streamId }) => {
+  await mongo.collection<Attributes>("accounts").updateOne({ id: streamId }, { $set: { status: "active" } });
 });
 
-projection.on<AccountClosed>("AccountClosed", async ({ data: { id } }) => {
-  await mongo.collection<Attributes>("accounts").updateOne({ id }, { $set: { status: "closed" } });
+projection.on<AccountClosed>("AccountClosed", async ({ streamId }) => {
+  await mongo.collection<Attributes>("accounts").updateOne({ id: streamId }, { $set: { status: "closed" } });
 });
