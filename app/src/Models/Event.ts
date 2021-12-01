@@ -6,15 +6,14 @@ type Attributes = { id: string } & EventRecord;
 export class Event extends Model<Attributes> {
   public static readonly $collection = "events";
 
-  public readonly streamId: EventRecord["streamId"];
-  public readonly type: EventRecord["type"];
-  public readonly data: EventRecord["data"];
-  public readonly meta: EventRecord["meta"];
-  public readonly date: EventRecord["date"];
-  public readonly author: EventRecord["author"];
-  public readonly height: EventRecord["height"];
-  public readonly parent: EventRecord["parent"];
-  public readonly commit: EventRecord["commit"];
+  public readonly streamId: Attributes["streamId"];
+  public readonly type: Attributes["type"];
+  public readonly data: Attributes["data"];
+  public readonly meta: Attributes["meta"];
+  public readonly date: Attributes["date"];
+  public readonly height: Attributes["height"];
+  public readonly parent: Attributes["parent"];
+  public readonly commit: Attributes["commit"];
 
   constructor(document: Attributes) {
     super(document);
@@ -24,7 +23,6 @@ export class Event extends Model<Attributes> {
     this.data = document.data;
     this.meta = document.meta;
     this.date = document.date;
-    this.author = document.author;
     this.height = document.height;
     this.parent = document.parent;
     this.commit = document.commit;
@@ -39,7 +37,6 @@ export class Event extends Model<Attributes> {
       data: this.data,
       meta: this.meta,
       date: this.date,
-      author: this.author,
       height: this.height,
       parent: this.parent,
       commit: this.commit

@@ -14,7 +14,12 @@ export async function setup(): Promise<void> {
 }
 
 async function dependencies(): Promise<void> {
-  await Promise.all([import("./Providers/AccessStore"), import("./Providers/EventNetwork"), import("./Providers/EventStore")]);
+  await Promise.all([
+    import("./Providers/AccessStore"),
+    import("./Providers/EventNetwork"),
+    import("./Providers/EventStore"),
+    import("./Providers/EventStream")
+  ]);
 }
 
 async function event() {

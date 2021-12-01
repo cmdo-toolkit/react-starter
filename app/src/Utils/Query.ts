@@ -1,18 +1,18 @@
-import { Collection, collections } from "../Collections";
+import { Collection, collection } from "../Collections";
 import type { Options } from "../Types/Query";
 
 export function resolveOne(key: Collection, { filter, observe = true }: Options, setData: React.Dispatch<any>) {
   if (observe) {
-    return collections[key].observeOne(filter).subscribe(setData).unsubscribe;
+    return collection[key].observeOne(filter).subscribe(setData).unsubscribe;
   }
-  collections[key].findOne(filter).then(setData);
+  collection[key].findOne(filter).then(setData);
 }
 
 export function resolveMany(key: Collection, { filter, observe = true, ...other }: Options, setData: React.Dispatch<any>) {
   if (observe) {
-    return collections[key].observe(filter, getQueryOptions(other)).subscribe(setData).unsubscribe;
+    return collection[key].observe(filter, getQueryOptions(other)).subscribe(setData).unsubscribe;
   }
-  collections[key].find(filter).then(setData);
+  collection[key].find(filter).then(setData);
 }
 
 export function getQueryOptions({ sort, skip, limit }: Options): Options | undefined {

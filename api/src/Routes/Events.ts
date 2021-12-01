@@ -1,4 +1,4 @@
-import { EventRecord, stream } from "cmdo-events";
+import { container, EventRecord } from "cmdo-events";
 import { Action, Route } from "cmdo-socket";
 
 import { collection } from "../Collections";
@@ -11,16 +11,18 @@ import { wss } from "../Providers/WebSocketServer";
  |--------------------------------------------------------------------------------
  */
 
-const add: Action<EventRecord> = async function (socket, event) {
+const add: Action<EventRecord> = async function (socket, event, store = container.get("EventStore")) {
   // const permission = socket.auth.access.get(descriptor.stream).can("add", descriptor.event.type);
   // if (!permission.granted) {
   //   return this.reject("You are not authorized to add this event to the stream");
   // }
-  const inserted = await stream.append(event);
-  if (inserted) {
-    socket.to(`stream:${event.streamId}`).emit("event", inserted);
+  try {
+    await store.insert(event);
+    socket.to(`stream:${event.streamId}`).emit("event", event);
+    return this.respond();
+  } catch (error) {
+    return this.reject(error.message);
   }
-  return this.respond();
 };
 
 const get: Action<{ stream: string; hash?: string }> = async function (_, { stream, hash }) {
