@@ -11,7 +11,7 @@
     "cmdo-socket": "3.0.0-rc3",
     "dotenv": "10.0.0",
     "eventemitter3": "4.0.7",
-    "jsonwebtoken": "8.5.1",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "4.1.4",
     "nanoid": "3.1.30",
     "stores": "../stores"
@@ -20,7 +20,7 @@
     "@swc/core": "1.2.108",
     "@swc/helpers": "0.2.14",
     "@types/eventemitter3": "2.0.2",
-    "@types/jsonwebtoken": "8.5.6",
+    "@types/jsonwebtoken": "^8.5.6",
     "@types/mongodb": "4.0.6",
     "@types/node": "16.11.7",
     "ts-node-dev": "1.1.8"

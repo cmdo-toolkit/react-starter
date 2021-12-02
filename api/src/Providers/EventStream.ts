@@ -34,5 +34,13 @@ container.set(
     public async getLastEvent(streamId: string) {
       return collection.events.findOne({ streamId }, { sort: { height: -1 } });
     }
+
+    public subscribe(): void {
+      // server does not handle subscriptions
+    }
+
+    public unsubscribe(): void {
+      // server does not handle subscriptions
+    }
   })()
 );

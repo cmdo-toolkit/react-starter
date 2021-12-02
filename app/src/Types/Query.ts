@@ -1,12 +1,12 @@
 import type { Options as QueryOptions } from "cmdo-db";
 
-import { collections } from "../Collections";
+import { collection } from "../Collections";
 
 export type RecordMap<T> = {
   [P in keyof T]: T[P];
 };
 
-export type Collections = RecordMap<typeof collections>;
+export type Collections = RecordMap<typeof collection>;
 
 export type Model<K extends keyof Collections> = InstanceType<Collections[K]["model"]>;
 

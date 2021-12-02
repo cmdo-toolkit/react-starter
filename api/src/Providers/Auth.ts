@@ -1,14 +1,15 @@
 import { AccessGrantOperation, AccessGrantsData, container, Store, TokenData } from "cmdo-auth";
-import decode from "jwt-decode";
+import * as jwt from "jsonwebtoken";
 
-import { socket } from "./Socket";
+import { collection } from "../Collections";
+import { config } from "../Config";
 
 type Data = TokenData;
 
 container
   .set("Token", {
     async decode(value: string) {
-      return decode<Data>(value);
+      return jwt.verify(value, config.auth.secret) as Data;
     }
   })
   .set(
@@ -46,11 +47,15 @@ container
           update.$set = $unset;
         }
 
-        await socket.send("auth.setGrants", { id, update });
+        await collection.grants.updateOne({ id }, update, { upsert: true });
       }
 
       public async getGrants(id: string): Promise<AccessGrantsData> {
-        return socket.send("auth.getGrants", { id });
+        const access = await collection.grants.findOne({ id });
+        if (access) {
+          return access.grants;
+        }
+        return {};
       }
     })()
   );

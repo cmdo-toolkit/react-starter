@@ -1,4 +1,4 @@
-export type Attributes = {
+export type Account = {
   id: string;
   status: Status;
   username: string;

@@ -5,7 +5,7 @@ import { stores } from "stores";
 
 import { useQuery } from "../../Hooks/UseQuery";
 import { useStream } from "../../Hooks/UseStream";
-import s from "./Users.module.scss";
+import type { User as UserInstance } from "../../Models/User";
 
 export function Users() {
   const users = useQuery("users", { sort: { name: 1 } });
@@ -33,7 +33,7 @@ export function Users() {
   );
 }
 
-function User({ user }: any) {
+function User({ user }: { user: UserInstance }) {
   useStream(user.id);
   return (
     <tr style={{ marginBottom: 20 }}>

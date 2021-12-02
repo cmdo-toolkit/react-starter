@@ -4,6 +4,6 @@ import { useEffect } from "react";
 /**
  * Connect and sync with an event stream.
  */
-export function useStream(id: string): void {
-  useEffect(() => subscribe(id), [id]);
+export function useStream(streamId: string): void {
+  useEffect(() => subscribe(streamId), [streamId]);
 }

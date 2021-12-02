@@ -52,23 +52,23 @@ export class Streams implements Service {
    |--------------------------------------------------------------------------------
    */
 
-  public async join(stream: string) {
+  public async join(streamId: string) {
     return this.socket
-      .send("streams.join", { stream })
+      .send("streams.join", { streamId })
       .then(() => {
-        debug("joined %s", stream);
-        this.streams.add(stream);
+        debug("joined %s", streamId);
+        this.streams.add(streamId);
         return this;
       })
       .catch((error) => {
-        debug("error %s %O", stream, error);
+        debug("error %s %O", streamId, error);
       });
   }
 
-  public async leave(stream: string) {
-    return this.socket.send("streams.leave", { stream }).then(() => {
-      debug("left %s", stream);
-      this.streams.delete(stream);
+  public async leave(streamId: string) {
+    return this.socket.send("streams.leave", { streamId }).then(() => {
+      debug("left %s", streamId);
+      this.streams.delete(streamId);
       return this;
     });
   }

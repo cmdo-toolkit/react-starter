@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 
+import { sign } from "../../Auth";
 import { socket } from "../../Providers/Socket";
 import { router } from "../../Router";
 import { InputsRef, usePin } from "../UsePin";
@@ -21,9 +22,11 @@ export function useToken(email: string): [InputsRef, Actions] {
       submit() {
         socket
           .send("account.validate", { email, token: data() })
-          .then(() => {
-            localStorage.setItem("token", "faker");
-            router.reload();
+          .then(({ token }) => {
+            localStorage.setItem("token", token);
+            sign(token).then(() => {
+              router.reload();
+            });
           })
           .catch((error: any) => {
             alert(error);

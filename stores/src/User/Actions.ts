@@ -9,12 +9,11 @@ export const create = createAction<Pick<User, "id" | "name" | "email">>(async fu
   // if (!permission.granted) {
   //   throw new Error(permission.message);
   // }
-  const streamId = createStreamId(id);
-  const state = await reduce(streamId, reducer);
+  const state = await reduce(id, reducer);
   if (state) {
     throw new Error("User already exists");
   }
-  await append(streamId, user.created({ data: { id, name, email } }));
+  await append(id, user.created({ data: { name, email } }));
 });
 
 export const setName = createAction<Pick<User, "id" | "name">>(async function ({ id, name }, { reduce, append }) {
@@ -22,15 +21,14 @@ export const setName = createAction<Pick<User, "id" | "name">>(async function ({
   // if (!permission.granted) {
   //   throw new Error(permission.message);
   // }
-  const streamId = createStreamId(id);
-  const state = await reduce(streamId, reducer);
+  const state = await reduce(id, reducer);
   if (!state) {
     throw new Error("User not found");
   }
   if (state.name === name) {
     throw new Error("Set Name Violation: Value of 'name' has not changed");
   }
-  await append(streamId, user.nameSet({ data: { id, name } }));
+  await append(id, user.nameSet({ data: { name } }));
 });
 
 export const setEmail = createAction<Pick<User, "id" | "email">>(async function ({ id, email }, { reduce, append }) {
@@ -38,12 +36,11 @@ export const setEmail = createAction<Pick<User, "id" | "email">>(async function 
   // if (!permission.granted) {
   //   throw new Error(permission.message);
   // }
-  const streamId = createStreamId(id);
-  const state = await reduce(streamId, reducer);
+  const state = await reduce(id, reducer);
   if (!state) {
     throw new Error("User not found");
   }
-  await append(streamId, user.emailSet({ data: { id, email } }));
+  await append(id, user.emailSet({ data: { email } }));
 });
 
 export const remove = createAction<Pick<User, "id">>(async function ({ id }, { reduce, append }) {
@@ -51,14 +48,9 @@ export const remove = createAction<Pick<User, "id">>(async function ({ id }, { r
   // if (!permission.granted) {
   //   throw new Error(permission.message);
   // }
-  const streamId = createStreamId(id);
-  const state = await reduce(streamId, reducer);
+  const state = await reduce(id, reducer);
   if (!state) {
     throw new Error("User not found");
   }
-  await append(streamId, user.removed({ data: { id } }));
+  await append(id, user.removed({}));
 });
-
-function createStreamId(userId: string) {
-  return `user-${userId}`;
-}

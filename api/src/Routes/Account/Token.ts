@@ -1,8 +1,7 @@
 import { customAlphabet } from "nanoid";
 
+import { collection } from "../../Collections";
 import { config } from "../../Config";
-import { mongo } from "../Mongo";
-import { Attributes } from "./Attributes";
 
 const generateToken = customAlphabet(config.auth.token.letters, config.auth.token.length);
 
@@ -17,7 +16,7 @@ export class Token {
 
   public async create(type: "email" | "sms" | "console") {
     const token = generateToken();
-    await mongo.collection<Attributes>("accounts").updateOne({ id: this.id }, { $set: { token } });
+    await collection.accounts.updateOne({ id: this.id }, { $set: { token } });
     switch (type) {
       case "email": {
         throw new Error("Email is not yet supported");
@@ -41,6 +40,6 @@ export class Token {
   }
 
   public async delete() {
-    await mongo.collection<Attributes>("accounts").updateOne({ id: this.id }, { $set: { token: "" } });
+    await collection.accounts.updateOne({ id: this.id }, { $set: { token: "" } });
   }
 }

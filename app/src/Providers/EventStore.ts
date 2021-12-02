@@ -8,7 +8,6 @@ container.set(
   "EventStore",
   new (class MingoEventStore implements EventStore<Event> {
     public async insert<Record extends EventRecord<Event>>(record: Record, hydrated = true) {
-      console.log("Append event record", record);
       const hasRecord = await collection.events.count({ streamId: record.streamId, commit: record.commit });
       if (!hasRecord) {
         collection.events.insert({ id: nanoid(), ...record });

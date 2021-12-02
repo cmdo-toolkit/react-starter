@@ -43,12 +43,7 @@ async function database(): Promise<void> {
  */
 
 async function providers(): Promise<void> {
-  await Promise.all([
-    import("./Providers/AccessStore"),
-    import("./Providers/EventNetwork"),
-    import("./Providers/EventStore"),
-    import("./Providers/EventStream")
-  ]);
+  await Promise.all([import("./Providers/Auth"), import("./Providers/EventStore"), import("./Providers/EventStream")]);
 }
 
 /*

@@ -27,31 +27,31 @@ const push: Action<{ events: EventRecord[] }> = async function (socket, { events
   return this.respond();
 };
 
-const pull: Action<{ id: string; hash?: string }> = async function (_, { id, hash }) {
+const pull: Action<{ streamId: string; hash?: string }> = async function (_, { streamId, hash }) {
   // const permission = socket.auth.access.get(stream).can("get", "events");
   // if (!permission.granted) {
   //   return this.reject("You are not authorized to get events on this stream");
   // }
-  const filter: any = { "data.id": id };
+  const filter: any = { streamId };
   if (hash) {
-    filter["hash.commit"] = {
+    filter["commit"] = {
       $gt: hash
     };
   }
   return this.respond(await collection.events.find(filter).sort({ "meta.timestamp": 1 }).toArray());
 };
 
-const join: Action<{ id: string }> = async function (socket, { id }) {
+const join: Action<{ streamId: string }> = async function (socket, { streamId }) {
   // const permission = socket.auth.access.get(stream).can("join", "stream");
   // if (!permission.granted) {
   //   return this.reject("You are not authorized to join this stream");
   // }
-  socket.join(`stream:${id}`);
+  socket.join(`stream:${streamId}`);
   return this.respond();
 };
 
-const leave: Action<{ id: string }> = async function (socket, { id }) {
-  socket.leave(`stream:${id}`);
+const leave: Action<{ streamId: string }> = async function (socket, { streamId }) {
+  socket.leave(`stream:${streamId}`);
   return this.respond();
 };
 
@@ -75,7 +75,7 @@ const leave: Action<{ id: string }> = async function (socket, { id }) {
 
 wss.register([
   Route.on("streams.push", [hasData(["events"]), push]),
-  Route.on("streams.pull", [hasData(["id"]), pull]),
-  Route.on("streams.join", [hasData(["id"]), join]),
-  Route.on("streams.leave", [hasData(["id"]), leave])
+  Route.on("streams.pull", [hasData(["streamId"]), pull]),
+  Route.on("streams.join", [hasData(["streamId"]), join]),
+  Route.on("streams.leave", [hasData(["streamId"]), leave])
 ]);

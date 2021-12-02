@@ -19,8 +19,8 @@
     "test": "node --inspect ./node_modules/.bin/jest --runInBand --verbose"
   },
   "dependencies": {
-    "cmdo-auth": "1.0.0-rc8",
-    "cmdo-events": "../cmdo-events"
+    "cmdo-auth": "1.0.0-rc10",
+    "cmdo-events": "3.0.0-rc19"
   },
   "devDependencies": {
     "@types/jest": "27.0.2",

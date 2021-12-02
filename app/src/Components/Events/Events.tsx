@@ -4,7 +4,6 @@ import React, { useState } from "react";
 
 import { useQuery } from "../../Hooks/UseQuery";
 import { Event } from "../../Models/Event";
-import s from "./Events.module.scss";
 
 export function Events() {
   const [events, setFilter] = useEventQuery();
@@ -16,6 +15,7 @@ export function Events() {
         <thead>
           <tr>
             <th>Type</th>
+            <th>Stream</th>
             <th>Data</th>
             <th>Height</th>
             <th>Created</th>
@@ -23,9 +23,10 @@ export function Events() {
         </thead>
         <tbody>
           {events.length > 0 ? (
-            events.map(({ type, data, date, height, commit }) => (
+            events.map(({ streamId, type, data, date, height, commit }) => (
               <tr key={commit}>
                 <td>{type as string}</td>
+                <td>{streamId}</td>
                 <td>
                   <pre>{JSON.stringify(data, null, 2)}</pre>
                 </td>

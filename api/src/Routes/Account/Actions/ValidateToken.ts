@@ -1,6 +1,8 @@
 import { Action } from "cmdo-socket";
+import * as jwt from "jsonwebtoken";
 import { stores } from "stores";
 
+import { config } from "../../../Config";
 import { Account } from "../Account";
 
 export const validateToken: Action<{ email: string; token: string }> = async function (_, { token, email }) {
@@ -20,5 +22,5 @@ export const validateToken: Action<{ email: string; token: string }> = async fun
 
   await account.token.delete();
 
-  return this.respond({ token: "futurejwt" });
+  return this.respond({ token: jwt.sign({ auditor: account.id }, config.auth.secret) });
 };

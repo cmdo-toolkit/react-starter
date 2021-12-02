@@ -1,12 +1,11 @@
 import { projection } from "cmdo-events";
 import type { AccountActivated, AccountClosed, AccountCreated } from "stores";
 
-import { Attributes } from "../Lib/Account";
-import { mongo } from "../Lib/Mongo";
+import { collection } from "../Collections";
 
-projection.on<AccountCreated>("AccountCreated", async ({ data: { id, email } }) => {
-  await mongo.collection<Attributes>("accounts").insertOne({
-    id,
+projection.on<AccountCreated>("AccountCreated", async ({ streamId, data: { email } }) => {
+  await collection.accounts.insertOne({
+    id: streamId,
     status: "onboarding",
     username: "",
     email,
@@ -14,10 +13,10 @@ projection.on<AccountCreated>("AccountCreated", async ({ data: { id, email } }) 
   });
 });
 
-projection.on<AccountActivated>("AccountActivated", async ({ data: { id } }) => {
-  await mongo.collection<Attributes>("accounts").updateOne({ id }, { $set: { status: "active" } });
+projection.on<AccountActivated>("AccountActivated", async ({ streamId }) => {
+  await collection.accounts.updateOne({ id: streamId }, { $set: { status: "active" } });
 });
 
-projection.on<AccountClosed>("AccountClosed", async ({ data: { id } }) => {
-  await mongo.collection<Attributes>("accounts").updateOne({ id }, { $set: { status: "closed" } });
+projection.on<AccountClosed>("AccountClosed", async ({ streamId }) => {
+  await collection.accounts.updateOne({ id: streamId }, { $set: { status: "closed" } });
 });

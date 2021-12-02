@@ -1,11 +1,9 @@
 import { nanoid } from "nanoid";
 import { stores } from "stores";
 
-import { mongo } from "../Mongo";
-import { Attributes, Status } from "./Attributes";
+import { collection } from "../../Collections";
+import { Account as Attributes, Status } from "../../Types/Account";
 import { Token } from "./Token";
-
-const COLLECTION_NAME = "accounts";
 
 export class Account {
   public readonly id: Attributes["id"];
@@ -42,14 +40,14 @@ export class Account {
   }
 
   public static async getByUsername(username: string) {
-    const record = await mongo.collection<Attributes>(COLLECTION_NAME).findOne({ username });
+    const record = await collection.accounts.findOne({ username });
     if (record) {
       return new Account(record);
     }
   }
 
   public static async getByEmail(email: string) {
-    const record = await mongo.collection<Attributes>(COLLECTION_NAME).findOne({ email });
+    const record = await collection.accounts.findOne({ email });
     if (record) {
       return new Account(record);
     }
