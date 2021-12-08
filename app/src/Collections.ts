@@ -1,12 +1,12 @@
 import { Collection as DBCollection } from "cmdo-db";
 
+import { Account } from "./Models/Account";
 import { Event } from "./Models/Event";
-import { User } from "./Models/User";
 import { adapter } from "./Providers/IDBAdapter";
 
 export type Collection = keyof typeof collection;
 
 export const collection = {
-  events: new DBCollection(Event, adapter),
-  users: new DBCollection(User, adapter)
+  accounts: new DBCollection(Account, adapter),
+  events: new DBCollection(Event, adapter)
 };

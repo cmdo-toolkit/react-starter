@@ -20,11 +20,9 @@
  */
 
 import * as accountAccess from "./Account/Access";
-import * as userAccess from "./User/Access";
 
 export const access = {
-  account: accountAccess,
-  user: userAccess
+  account: accountAccess
 };
 
 /*
@@ -33,28 +31,23 @@ export const access = {
  |--------------------------------------------------------------------------------
  */
 
-import { AccountCreated, AccountActivated, AccountEmailSet, AccountClosed } from "./Account/Events";
-import { UserCreated, UserEmailSet, UserNameSet, UserRemoved } from "./User/Events";
+import { AccountCreated, AccountActivated, AccountAliasSet, AccountNameSet, AccountEmailSet, AccountClosed } from "./Account/Events";
 
 export type Event =
   | AccountCreated
   | AccountActivated
+  | AccountAliasSet
+  | AccountNameSet
   | AccountEmailSet
-  | AccountClosed
-  | UserCreated
-  | UserEmailSet
-  | UserNameSet
-  | UserRemoved;
+  | AccountClosed;
 
 export {
   AccountCreated,
   AccountActivated,
+  AccountAliasSet,
+  AccountNameSet,
   AccountEmailSet,
-  AccountClosed,
-  UserCreated,
-  UserEmailSet,
-  UserNameSet,
-  UserRemoved
+  AccountClosed
 };
 
 /*
@@ -64,9 +57,7 @@ export {
  */
 
 import * as accountActions from "./Account/Actions";
-import * as userActions from "./User/Actions";
 
 export const stores = {
-  account: accountActions,
-  user: userActions
+  account: accountActions
 };

@@ -2,12 +2,12 @@ import { Document, Model } from "cmdo-db";
 import { stores } from "stores";
 
 type Attributes = Document & {
-  name: string;
+  name?: string;
   email: string;
 };
 
-export class User extends Model<Attributes> {
-  public static readonly $collection = "users";
+export class Account extends Model<Attributes> {
+  public static readonly $collection = "accounts";
 
   public readonly name: Attributes["name"];
   public readonly email: Attributes["email"];
@@ -28,15 +28,11 @@ export class User extends Model<Attributes> {
    */
 
   public setName(name: string) {
-    return stores.user.setName({ id: this.id, name });
+    return stores.account.setAlias({ accountId: this.id, alias: name });
   }
 
   public setEmail(email: string) {
-    return stores.user.setEmail({ id: this.id, email });
-  }
-
-  public remove() {
-    return stores.user.remove({ id: this.id });
+    return stores.account.setEmail({ accountId: this.id, email });
   }
 
   /*

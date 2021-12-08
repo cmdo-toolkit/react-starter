@@ -2,6 +2,7 @@ import { container, createEventRecord, EventRecord, EventStream, ReduceHandler, 
 import type { Event } from "stores";
 
 import { collection } from "../Collections";
+import { store } from "./EventStore";
 import { socket } from "./Socket";
 
 const streams: Record<string, StreamSubscriptionHandler> = {};
@@ -43,9 +44,18 @@ container.set(
       return collection.events.findOne({ streamId }, { sort: { height: -1 } });
     }
 
-    public subscribe(streamId: string, handler: StreamSubscriptionHandler): void {
+    public async subscribe(streamId: string, handler: StreamSubscriptionHandler) {
       socket.streams.join(streamId);
+
       streams[streamId] = handler;
+
+      const last = await this.getLastEvent(streamId);
+
+      socket.send("streams.pull", { streamId, hash: last?.commit }).then(async (events) => {
+        for (const event of events) {
+          await store.insert(event);
+        }
+      });
     }
 
     public unsubscribe(streamId: string): void {

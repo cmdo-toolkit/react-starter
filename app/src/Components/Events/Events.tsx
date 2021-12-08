@@ -4,13 +4,17 @@ import React, { useState } from "react";
 
 import { useQuery } from "../../Hooks/UseQuery";
 import { Event } from "../../Models/Event";
+import { socket } from "../../Providers/Socket";
 
 export function Events() {
   const [events, setFilter] = useEventQuery();
   return (
     <div>
       <h1>Events</h1>
-      <input placeholder="Find event by id, name or email" onChange={(e) => setFilter(e.target.value)} />
+      <div>
+        <input placeholder="Find event by id, name or email" onChange={(e) => setFilter(e.target.value)} />
+        <button onClick={() => socket.send("events.rehydrate")}>Rehydrate</button>
+      </div>
       <table>
         <thead>
           <tr>
@@ -36,7 +40,7 @@ export function Events() {
             ))
           ) : (
             <tr>
-              <td colSpan={4} style={{ textAlign: "center" }}>
+              <td colSpan={5} style={{ textAlign: "center" }}>
                 No events found
               </td>
             </tr>

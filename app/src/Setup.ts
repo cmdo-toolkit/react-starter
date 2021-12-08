@@ -20,7 +20,7 @@ async function dependencies(): Promise<void> {
 }
 
 async function event() {
-  await Promise.all([import("./Projections/User")]);
+  await Promise.all([import("./Projections/Account")]);
 }
 
 async function routes() {

@@ -1,14 +1,19 @@
 import { createReducer } from "cmdo-events";
 
 import { Account } from "./Aggregate";
-import type { AccountActivated, AccountClosed, AccountCreated, AccountEmailSet } from "./Events";
+import type { AccountActivated, AccountAliasSet, AccountClosed, AccountCreated, AccountEmailSet, AccountNameSet } from "./Events";
 
-type Event = AccountCreated | AccountActivated | AccountEmailSet | AccountClosed;
+type Event = AccountCreated | AccountActivated | AccountAliasSet | AccountNameSet | AccountEmailSet | AccountClosed;
 
 export const reducer = createReducer<Account, Event>(
   {
     accountId: "",
     status: "onboarding",
+    alias: "",
+    name: {
+      family: "",
+      given: ""
+    },
     email: "",
     token: ""
   },
@@ -16,17 +21,27 @@ export const reducer = createReducer<Account, Event>(
     switch (event.type) {
       case "AccountCreated": {
         return {
+          ...state,
           accountId: event.streamId,
-          status: "onboarding",
-          username: "",
-          email: event.data.email,
-          token: ""
+          email: event.data.email
         };
       }
       case "AccountActivated": {
         return {
           ...state,
           status: "active"
+        };
+      }
+      case "AccountAliasSet": {
+        return {
+          ...state,
+          alias: event.data.alias
+        };
+      }
+      case "AccountNameSet": {
+        return {
+          ...state,
+          name: event.data.name
         };
       }
       case "AccountEmailSet": {

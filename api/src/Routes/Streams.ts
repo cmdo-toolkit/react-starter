@@ -38,14 +38,14 @@ const pull: Action<{ streamId: string; hash?: string }> = async function (_, { s
       $gt: hash
     };
   }
-  return this.respond(await collection.events.find(filter).sort({ "meta.timestamp": 1 }).toArray());
+  return this.respond(await collection.events.find(filter).sort({ date: 1 }).toArray());
 };
 
 const join: Action<{ streamId: string }> = async function (socket, { streamId }) {
-  // const permission = socket.auth.access.get(stream).can("join", "stream");
-  // if (!permission.granted) {
-  //   return this.reject("You are not authorized to join this stream");
-  // }
+  const permission = socket.auth.access.get(streamId).can("join", "stream");
+  if (!permission.granted) {
+    return this.reject("You are not authorized to join this stream");
+  }
   socket.join(`stream:${streamId}`);
   return this.respond();
 };

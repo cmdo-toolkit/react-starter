@@ -1,10 +1,12 @@
 import { createEvent } from "cmdo-events";
 
-import type { AccountActivated, AccountClosed, AccountCreated, AccountEmailSet } from "./Events";
+import type { AccountActivated, AccountAliasSet, AccountClosed, AccountCreated, AccountEmailSet, AccountNameSet } from "./Events";
 
 export const account = {
   created: createEvent<AccountCreated>("AccountCreated"),
   activated: createEvent<AccountActivated>("AccountActivated"),
+  aliasSet: createEvent<AccountAliasSet>("AccountAliasSet"),
+  nameSet: createEvent<AccountNameSet>("AccountNameSet"),
   emailSet: createEvent<AccountEmailSet>("AccountEmailSet"),
   closed: createEvent<AccountClosed>("AccountClosed")
 };

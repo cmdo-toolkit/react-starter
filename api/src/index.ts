@@ -59,8 +59,7 @@ async function routes() {
     import("./Routes/Auth"),
     import("./Routes/Channels"),
     import("./Routes/Events"),
-    import("./Routes/Streams"),
-    import("./Routes/User")
+    import("./Routes/Streams")
   ]);
 }
 
@@ -71,7 +70,7 @@ async function routes() {
  */
 
 async function projections() {
-  await Promise.all([import("./Projections/Account"), import("./Projections/User")]);
+  await Promise.all([import("./Projections/Account")]);
 }
 
 /*

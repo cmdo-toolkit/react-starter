@@ -8,14 +8,16 @@ import { Token } from "./Token";
 export class Account {
   public readonly id: Attributes["id"];
   public readonly status: Attributes["status"];
-  public readonly username: Attributes["username"];
+  public readonly alias: Attributes["alias"];
+  public readonly name: Attributes["name"];
   public readonly email: Attributes["email"];
   public readonly token: Token;
 
   constructor(attributes: Attributes) {
     this.id = attributes.id;
     this.status = attributes.status;
-    this.username = attributes.username;
+    this.alias = attributes.alias;
+    this.name = attributes.name;
     this.email = attributes.email;
     this.token = new Token(attributes.id, attributes.token);
   }
@@ -73,7 +75,8 @@ export class Account {
     return {
       id: this.id,
       status: this.status,
-      username: this.username,
+      alias: this.alias,
+      name: this.name,
       email: this.email,
       token: this.token.value,
       ...attributes

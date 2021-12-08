@@ -1,4 +1,4 @@
-import { container, EventRecord } from "cmdo-events";
+import { container, EventRecord, publisher } from "cmdo-events";
 import { Action, Route } from "cmdo-socket";
 
 import { collection } from "../Collections";
@@ -39,10 +39,32 @@ const get: Action<{ stream: string; hash?: string }> = async function (_, { stre
   return this.respond(await collection.events.find(filter).sort({ "meta.timestamp": 1 }).toArray());
 };
 
+const rehydrate: Action = async function () {
+  console.log("Starting re-hydration process!");
+  await Promise.all(
+    Object.keys(collection).map((key) => {
+      if (key !== "events") {
+        return (collection[key as keyof typeof collection] as any).deleteMany({});
+      }
+      return new Promise<void>((resolve) => resolve());
+    })
+  );
+  const events = await collection.events.find({}, { sort: { date: 1 } }).toArray();
+  for (const event of events) {
+    await publisher.project(event, { outdated: false, hydrated: true });
+  }
+  console.log("Hydration ended successfully");
+  return this.respond();
+};
+
 /*
  |--------------------------------------------------------------------------------
  | Register
  |--------------------------------------------------------------------------------
  */
 
-wss.register([Route.on("events.add", [hasData(["id", "streams", "event"]), add]), Route.on("events.get", [hasData(["stream"]), get])]);
+wss.register([
+  Route.on("events.add", [hasData(["id", "streams", "event"]), add]),
+  Route.on("events.get", [hasData(["stream"]), get]),
+  Route.on("events.rehydrate", [rehydrate])
+]);
