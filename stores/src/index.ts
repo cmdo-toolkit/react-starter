@@ -12,19 +12,33 @@
   
  */
 
+
+/*
+ |--------------------------------------------------------------------------------
+ | Access
+ |--------------------------------------------------------------------------------
+ */
+
+import * as accountAccess from "./Account/Access";
+import * as userAccess from "./User/Access";
+
+export const access = {
+  account: accountAccess,
+  user: userAccess
+};
+
 /*
  |--------------------------------------------------------------------------------
  | Events
  |--------------------------------------------------------------------------------
  */
 
-import { AccountCreated, AccountActivated, AccountUsernameSet, AccountEmailSet, AccountClosed } from "./Account/Events";
+import { AccountCreated, AccountActivated, AccountEmailSet, AccountClosed } from "./Account/Events";
 import { UserCreated, UserEmailSet, UserNameSet, UserRemoved } from "./User/Events";
 
 export type Event =
   | AccountCreated
   | AccountActivated
-  | AccountUsernameSet
   | AccountEmailSet
   | AccountClosed
   | UserCreated
@@ -35,7 +49,6 @@ export type Event =
 export {
   AccountCreated,
   AccountActivated,
-  AccountUsernameSet,
   AccountEmailSet,
   AccountClosed,
   UserCreated,
@@ -50,10 +63,10 @@ export {
  |--------------------------------------------------------------------------------
  */
 
-import * as account from "./Account/Actions";
-import * as user from "./User/Actions";
+import * as accountActions from "./Account/Actions";
+import * as userActions from "./User/Actions";
 
 export const stores = {
-  account,
-  user
+  account: accountActions,
+  user: userActions
 };

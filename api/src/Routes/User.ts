@@ -11,8 +11,8 @@ import { wss } from "../Providers/WebSocketServer";
  |--------------------------------------------------------------------------------
  */
 
-const create: Action<{ name: string; email: string }> = async function (_, data) {
-  stores.user.create({ id: nanoid(), ...data });
+const create: Action<{ name: string; email: string }> = async function (socket, data) {
+  stores.user.create({ accountId: socket.auth.auditor, userId: nanoid(), ...data });
   return this.respond();
 };
 

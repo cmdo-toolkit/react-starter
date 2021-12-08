@@ -7,7 +7,8 @@ type Event = UserCreated | UserEmailSet | UserNameSet | UserRemoved;
 
 export const reducer = createReducer<User, Event>(
   {
-    id: "",
+    accountId: "",
+    userId: "",
     name: "",
     email: ""
   },
@@ -15,7 +16,8 @@ export const reducer = createReducer<User, Event>(
     switch (event.type) {
       case "UserCreated": {
         return {
-          id: event.streamId,
+          accountId: event.data.accountId,
+          userId: event.streamId,
           name: event.data.name,
           email: event.data.email
         };

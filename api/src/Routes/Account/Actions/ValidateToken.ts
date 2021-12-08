@@ -17,7 +17,7 @@ export const validateToken: Action<{ email: string; token: string }> = async fun
   }
 
   if (account.is("onboarding")) {
-    await stores.account.activate({ id: account.id });
+    await stores.account.activate({ accountId: account.id });
   }
 
   await account.token.delete();

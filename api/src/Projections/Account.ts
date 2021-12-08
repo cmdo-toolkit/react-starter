@@ -1,5 +1,6 @@
 import { projection } from "cmdo-events";
 import type { AccountActivated, AccountClosed, AccountCreated } from "stores";
+import { access } from "stores";
 
 import { collection } from "../Collections";
 
@@ -11,6 +12,7 @@ projection.on<AccountCreated>("AccountCreated", async ({ streamId, data: { email
     email,
     token: ""
   });
+  await access.account.setup(streamId);
 });
 
 projection.on<AccountActivated>("AccountActivated", async ({ streamId }) => {

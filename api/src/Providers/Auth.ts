@@ -1,4 +1,4 @@
-import { AccessGrantOperation, AccessGrantsData, container, Store, TokenData } from "cmdo-auth";
+import { container, GrantOperation, GrantsData, Store, TokenData } from "cmdo-auth";
 import * as jwt from "jsonwebtoken";
 
 import { collection } from "../Collections";
@@ -15,7 +15,7 @@ container
   .set(
     "Store",
     new (class AuthStore implements Store {
-      public async setGrants(id: string, acid: string, operations: AccessGrantOperation[]): Promise<void> {
+      public async setGrants(id: string, acid: string, operations: GrantOperation[]): Promise<void> {
         const update: any = {};
         const $set: any = {};
         const $unset: any = {};
@@ -50,7 +50,7 @@ container
         await collection.grants.updateOne({ id }, update, { upsert: true });
       }
 
-      public async getGrants(id: string): Promise<AccessGrantsData> {
+      public async getGrants(id: string): Promise<GrantsData> {
         const access = await collection.grants.findOne({ id });
         if (access) {
           return access.grants;

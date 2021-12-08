@@ -1,7 +1,6 @@
 export type Account = {
-  id: string;
+  accountId: string;
   status: Status;
-  username: string;
   email: string;
   token: string;
 };

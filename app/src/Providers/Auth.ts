@@ -1,4 +1,4 @@
-import { AccessGrantOperation, AccessGrantsData, container, Store, TokenData } from "cmdo-auth";
+import { container, GrantOperation, GrantsData, Store, TokenData } from "cmdo-auth";
 import decode from "jwt-decode";
 
 import { socket } from "./Socket";
@@ -14,7 +14,7 @@ container
   .set(
     "Store",
     new (class AuthStore implements Store {
-      public async setGrants(id: string, acid: string, operations: AccessGrantOperation[]): Promise<void> {
+      public async setGrants(id: string, acid: string, operations: GrantOperation[]): Promise<void> {
         const update: any = {};
         const $set: any = {};
         const $unset: any = {};
@@ -49,7 +49,7 @@ container
         await socket.send("auth.setGrants", { id, update });
       }
 
-      public async getGrants(id: string): Promise<AccessGrantsData> {
+      public async getGrants(id: string): Promise<GrantsData> {
         return socket.send("auth.getGrants", { id });
       }
     })()

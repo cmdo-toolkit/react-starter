@@ -27,7 +27,7 @@ export class Account {
    */
 
   public static async create(email: string) {
-    await stores.account.create({ id: nanoid(), email });
+    await stores.account.create({ accountId: nanoid(), email });
     return this.getByEmail(email);
   }
 
