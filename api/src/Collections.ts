@@ -17,6 +17,7 @@ export async function loadCollections() {
 async function loadEventsIndexes() {
   await collection.events.createIndexes([
     { name: "height", key: { streamId: 1, height: 1 }, unique: true },
+    { name: "parent", key: { streamId: 1, parent: 1 }, unique: true },
     { name: "commit", key: { streamId: 1, commit: 1 }, unique: true },
     { name: "outdated", key: { streamId: 1, type: 1, date: 1 } }
   ]);
