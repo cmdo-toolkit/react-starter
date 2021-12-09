@@ -42,10 +42,10 @@ const pull: Action<{ streamId: string; hash?: string }> = async function (_, { s
 };
 
 const join: Action<{ streamId: string }> = async function (socket, { streamId }) {
-  const permission = socket.auth.access.get(streamId).can("join", "stream");
-  if (!permission.granted) {
-    return this.reject("You are not authorized to join this stream");
-  }
+  // const permission = socket.auth.access.get(streamId).can("join", "stream");
+  // if (!permission.granted) {
+  //   return this.reject("You are not authorized to join this stream");
+  // }
   socket.join(`stream:${streamId}`);
   return this.respond();
 };

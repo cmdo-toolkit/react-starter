@@ -21,9 +21,9 @@ container.set(
     }
 
     public async reduce<Reduce extends ReduceHandler>(streamId: string, reduce: Reduce) {
-      // if (network.is("available")) {
-      //   const isValid = await network.validate(streamId, await getStreamHash(streamId));
-      // }
+      if (socket.isConnected) {
+        await this.sync(streamId);
+      }
       const events = await this.getEvents(streamId);
       if (events.length) {
         return reduce(events) as ReturnType<Reduce>;
@@ -46,21 +46,55 @@ container.set(
 
     public async subscribe(streamId: string, handler: StreamSubscriptionHandler) {
       socket.streams.join(streamId);
-
       streams[streamId] = handler;
-
-      const last = await this.getLastEvent(streamId);
-
-      socket.send("streams.pull", { streamId, hash: last?.commit }).then(async (events) => {
-        for (const event of events) {
-          await store.insert(event);
-        }
-      });
+      this.pull(streamId);
     }
 
     public unsubscribe(streamId: string): void {
       socket.streams.leave(streamId);
       delete streams[streamId];
+    }
+
+    private async sync(streamId: string) {
+      await this.pull(streamId);
+      // await this.push(streamId);
+    }
+
+    /**
+     * Pull the events from the connected socket to ensure we are on the latest
+     * central node version of the stream. This operation keeps repeating itself
+     * until it pulls an empty event array signifying we are now up to date
+     * with the central node.
+     *
+     * A simple itteration guard is added so that we can escape out of a potential
+     * infinite loop.
+     */
+    private async pull(streamId: string, itteration = 0) {
+      if (itteration > 100) {
+        throw new Error("Encountered more than 100 stream pull operations, an infinite loop may be at large!");
+      }
+      socket
+        .send("streams.pull", { streamId, hash: await this.getRemoteCursor(streamId) })
+        .then(async (events: EventRecord<Event>[]) => {
+          if (events.length > 0) {
+            for (const event of events) {
+              await store.insert(event);
+            }
+            await this.setRemoteCursor(streamId, events[events.length - 1].commit);
+            return this.pull(streamId, itteration + 1); // keep pulling the stream until its hydrated
+          }
+        });
+    }
+
+    private async setRemoteCursor(streamId: string, commit: string) {
+      await collection.streams.upsert({ id: streamId, commit });
+    }
+
+    private async getRemoteCursor(streamId: string) {
+      const stream = await collection.streams.findOne({ id: streamId });
+      if (stream) {
+        return stream.commit;
+      }
     }
   })()
 );

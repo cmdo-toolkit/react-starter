@@ -1,4 +1,4 @@
-import { container, GrantOperation, GrantsData, Store, TokenData } from "cmdo-auth";
+import { container, Database, RoleData, TokenData } from "cmdo-auth";
 import decode from "jwt-decode";
 
 import { socket } from "./Socket";
@@ -6,51 +6,56 @@ import { socket } from "./Socket";
 type Data = TokenData;
 
 container
+  .set(
+    "Database",
+    new (class WebDatabase implements Database {
+      /**
+       * Add new role to the persistent storage.
+       */
+      public async addRole(): Promise<void> {
+        throw new Error("Operation cannot be performed on client");
+      }
+      /**
+       * Retrieve role from persistent storage.
+       */
+      public async getRole(roleId: string): Promise<RoleData | null> {
+        return socket.send("auth.getRole", { roleId });
+      }
+
+      /**
+       * Set permission configuration for the given role.
+       */
+      public async setPermissions(): Promise<void> {
+        throw new Error("Operation cannot be performed on client");
+      }
+
+      /**
+       * Retrieve all permissions assigned to the given member within the provided tenant.
+       * A member can be assigned to multiple roles within a tenant so the permission
+       * method should retrieve all roles for the given member and combine them into a single
+       * permissions object.
+       */
+      public async getPermissions<Permissions extends RoleData["permissions"]>(tenantId: string): Promise<Permissions> {
+        return socket.send("auth.getPermissions", { tenantId });
+      }
+
+      /**
+       * Add a member to given role.
+       */
+      public async addMember(): Promise<void> {
+        throw new Error("Operation cannot be performed on client");
+      }
+
+      /**
+       * Remove a member from given role.
+       */
+      public async delMember(): Promise<void> {
+        throw new Error("Operation cannot be performed on client");
+      }
+    })()
+  )
   .set("Token", {
     async decode(value: string) {
       return decode<Data>(value);
     }
-  })
-  .set(
-    "Store",
-    new (class AuthStore implements Store {
-      public async setGrants(id: string, acid: string, operations: GrantOperation[]): Promise<void> {
-        const update: any = {};
-        const $set: any = {};
-        const $unset: any = {};
-
-        for (const operation of operations) {
-          switch (operation.type) {
-            case "set": {
-              const { resource, action, data = true } = operation;
-              $set[`grants.${acid}.${resource}.${action}`] = data;
-              break;
-            }
-            case "unset": {
-              const { resource, action } = operation;
-              let path = `grants.${acid}.${resource}`;
-              if (action) {
-                path += `.${action}`;
-              }
-              $unset[path] = "";
-              break;
-            }
-          }
-        }
-
-        if (Object.keys($set).length) {
-          update.$set = $set;
-        }
-
-        if (Object.keys($unset).length) {
-          update.$set = $unset;
-        }
-
-        await socket.send("auth.setGrants", { id, update });
-      }
-
-      public async getGrants(id: string): Promise<GrantsData> {
-        return socket.send("auth.getGrants", { id });
-      }
-    })()
-  );
+  });

@@ -5,11 +5,12 @@ import React, { useState } from "react";
 import { useQuery } from "../../Hooks/UseQuery";
 import { Event } from "../../Models/Event";
 import { socket } from "../../Providers/Socket";
+import s from "./Events.module.scss";
 
 export function Events() {
   const [events, setFilter] = useEventQuery();
   return (
-    <div>
+    <div className={s.container}>
       <h1>Events</h1>
       <div>
         <input placeholder="Find event by id, name or email" onChange={(e) => setFilter(e.target.value)} />

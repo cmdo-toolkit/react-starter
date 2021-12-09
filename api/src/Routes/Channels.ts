@@ -10,12 +10,12 @@ import { wss } from "../Providers/WebSocketServer";
  */
 
 const join: Action<{ channelId: string }> = async function (socket, { channelId }) {
-  if (channelId !== "public") {
-    const permission = socket.auth.access.get(channelId).can("join", "room");
-    if (!permission.granted) {
-      return this.reject("You are not authorized to join this channel");
-    }
-  }
+  // if (channelId !== "public") {
+  //   const permission = access.can("join", "room");
+  //   if (!permission.granted) {
+  //     return this.reject("You are not authorized to join this channel");
+  //   }
+  // }
   socket.join(`channel:${channelId}`);
   return this.respond();
 };

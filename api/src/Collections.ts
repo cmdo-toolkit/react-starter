@@ -1,13 +1,13 @@
+import { RoleData } from "cmdo-auth";
 import type { EventRecord } from "cmdo-events";
 
 import { mongo } from "./Lib/Mongo";
 import type { Account } from "./Types/Account";
-import type { Grants } from "./Types/Grants";
 
 export const collection = {
   accounts: mongo.collection<Account>("accounts"),
-  grants: mongo.collection<Grants>("grants"),
-  events: mongo.collection<EventRecord>("events")
+  events: mongo.collection<EventRecord>("events"),
+  roles: mongo.collection<RoleData>("roles")
 };
 
 export async function loadCollections() {

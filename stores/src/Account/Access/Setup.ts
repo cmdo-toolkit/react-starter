@@ -1,20 +1,24 @@
-import { AccessControl, createAllFilter } from "cmdo-auth";
+import { container, createAllFilter } from "cmdo-auth";
 
 import { ACCOUNT_FLAGS } from "./Constants";
 
-export async function setup(accountId: string): Promise<void> {
-  await AccessControl.for(accountId).then((access) =>
-    access
-      .grants(accountId)
-      .grant("account", "setAlias")
-      .grant("account", "setName")
-      .grant("account", "setEmail")
-      .grant("account", "read", {
-        owner: createAllFilter(ACCOUNT_FLAGS),
-        admin: ACCOUNT_FLAGS.accountId | ACCOUNT_FLAGS.status | ACCOUNT_FLAGS.alias | ACCOUNT_FLAGS.name | ACCOUNT_FLAGS.email
-      })
-      .grant("user", "create")
-      .grant("stream", "join")
-      .commit()
-  );
+export async function setup(accountId: string, db = container.get("Database")): Promise<void> {
+  await db.addRole({
+    roleId: accountId,
+    tenantId: accountId,
+    name: "Account",
+    settings: {},
+    permissions: {
+      account: {
+        setAlias: true,
+        setName: true,
+        setEmail: true,
+        read: {
+          owner: createAllFilter(ACCOUNT_FLAGS),
+          admin: ACCOUNT_FLAGS.accountId | ACCOUNT_FLAGS.status | ACCOUNT_FLAGS.alias | ACCOUNT_FLAGS.name | ACCOUNT_FLAGS.email
+        }
+      }
+    },
+    members: [accountId]
+  });
 }

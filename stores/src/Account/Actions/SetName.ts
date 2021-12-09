@@ -1,14 +1,12 @@
 import { createAction } from "cmdo-events";
 
+import { get } from "../Access";
 import { Account } from "../Aggregate";
 import { account } from "../Factories";
 import { reducer } from "../Reducer";
 
-export const setName = createAction<Pick<Account, "accountId" | "name">>(async function (
-  { accountId, name },
-  { auth, reduce, append }
-) {
-  const permission = auth.access.get(accountId).can("setName", "account");
+export const setName = createAction<Pick<Account, "accountId" | "name">>(async function ({ accountId, name }, { reduce, append }) {
+  const permission = await get(accountId).then((access) => access.can("setName", "account"));
   if (!permission.granted) {
     throw new Error(permission.message);
   }
