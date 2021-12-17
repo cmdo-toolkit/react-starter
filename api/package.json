@@ -2,13 +2,14 @@
   "name": "api",
   "private": true,
   "scripts": {
+    "clean": "rm -rf ./node_modules ./package-lock.json",
     "start": "ts-node-dev src/index.ts",
     "lint": "eslint 'src/**/*.ts' --fix"
   },
   "dependencies": {
     "chalk": "4.1.2",
     "cmdo-http": "3.0.2",
-    "cmdo-socket": "3.0.0-rc3",
+    "cmdo-socket": "3.0.0-rc4",
     "dotenv": "10.0.0",
     "eventemitter3": "4.0.7",
     "jsonwebtoken": "^8.5.1",

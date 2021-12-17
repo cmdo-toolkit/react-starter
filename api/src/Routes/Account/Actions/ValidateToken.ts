@@ -17,10 +17,10 @@ export const validateToken: Action<{ email: string; token: string }> = async fun
   }
 
   if (account.is("onboarding")) {
-    await stores.account.activate({ accountId: account.id });
+    await stores.account.activate({ accountId: account.accountId });
   }
 
   await account.token.delete();
 
-  return this.respond({ token: jwt.sign({ auditor: account.id }, config.auth.secret) });
+  return this.respond({ token: jwt.sign({ auditor: account.accountId }, config.auth.secret) });
 };

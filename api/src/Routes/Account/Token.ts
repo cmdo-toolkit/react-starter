@@ -6,17 +6,17 @@ import { config } from "../../Config";
 const generateToken = customAlphabet(config.auth.token.letters, config.auth.token.length);
 
 export class Token {
-  public readonly id: string;
+  public readonly accountId: string;
   public readonly value: string;
 
-  constructor(id: string, value: string) {
-    this.id = id;
+  constructor(accountId: string, value: string) {
+    this.accountId = accountId;
     this.value = value;
   }
 
   public async create(type: "email" | "sms" | "console") {
     const token = generateToken();
-    await collection.accounts.updateOne({ id: this.id }, { $set: { token } });
+    await collection.accounts.updateOne({ accountId: this.accountId }, { $set: { token } });
     switch (type) {
       case "email": {
         throw new Error("Email is not yet supported");
@@ -40,6 +40,6 @@ export class Token {
   }
 
   public async delete() {
-    await collection.accounts.updateOne({ id: this.id }, { $set: { token: "" } });
+    await collection.accounts.updateOne({ accountId: this.accountId }, { $set: { token: "" } });
   }
 }

@@ -11,7 +11,12 @@ import { getEventExports, getEventImports, getEvents } from "./Events";
 
 export async function stores(cwd: string) {
   const src = path.resolve(cwd);
-  await writeStores(src, await getAccess(src), await getEvents(src, src), await getStores(src));
+  await writeStores(src, {
+    output: await getOutput(src),
+    access: await getAccess(src),
+    events: await getEvents(src, src),
+    stores: await getStores(src)
+  });
 }
 
 /*
@@ -19,6 +24,23 @@ export async function stores(cwd: string) {
  | Utilities
  |--------------------------------------------------------------------------------
  */
+
+async function getOutput(src: string) {
+  const output: string[] = [];
+  const dir = await fs.promises.opendir(src);
+  for await (const dirent of dir) {
+    const file = `${src}/${dirent.name}/index.ts`;
+    if (dirent.isDirectory()) {
+      try {
+        await fs.promises.access(file);
+        output.push(dirent.name);
+      } catch (e) {
+        // ignore failed access attempt
+      }
+    }
+  }
+  return output;
+}
 
 async function getAccess(src: string) {
   const access: Map<string, string> = new Map();
@@ -48,8 +70,9 @@ async function getStores(src: string) {
  |--------------------------------------------------------------------------------
  */
 
-async function writeStores(src: string, access: Map<string, string>, events: any, stores: Map<string, string>) {
+async function writeStores(src: string, { output, access, events, stores }: any) {
   writeStoresMod(src, {
+    output: getOutputExports(output),
     access: getAccessImports(src, access) + getAccessExports(access),
     events: getEventImports(events) + getEventExports(events),
     stores: getStoresImports(src, stores) + getStoresExports(stores)
@@ -57,10 +80,14 @@ async function writeStores(src: string, access: Map<string, string>, events: any
 }
 
 function writeStoresMod(cwd: string, output: any) {
-  const index = fs.readFileSync(path.join(process.cwd(), "build/Templates/index"), "utf-8");
+  const exports = fs.readFileSync(path.join(process.cwd(), "build/Templates/index"), "utf-8");
   fs.writeFileSync(
     path.resolve(cwd, "index.ts"),
-    index.replace("$access", output.access).replace("$events", output.events).replace("$stores", output.stores)
+    exports
+      .replace("$output", output.output)
+      .replace("$access", output.access)
+      .replace("$events", output.events)
+      .replace("$stores", output.stores)
   );
 }
 
@@ -78,6 +105,14 @@ function getStoresImports(src: string, stores: Map<string, string>) {
     imports += `import * as ${store.toLowerCase()}Actions from "${path.replace(src, ".")}/Actions";\n`;
   }
   return imports + "\n";
+}
+
+function getOutputExports(stores: Map<string, string>) {
+  const exports = [];
+  for (const name of stores) {
+    exports.push(`export * from "./${name}";`);
+  }
+  return exports.join("\n");
 }
 
 function getStoresExports(stores: Map<string, string>) {

@@ -1,12 +1,11 @@
 import { nanoid } from "nanoid";
-import { stores } from "stores";
+import { Account as Attributes, stores } from "stores";
 
 import { collection } from "../../Collections";
-import { Account as Attributes, Status } from "../../Types/Account";
 import { Token } from "./Token";
 
 export class Account {
-  public readonly id: Attributes["id"];
+  public readonly accountId: Attributes["accountId"];
   public readonly status: Attributes["status"];
   public readonly alias: Attributes["alias"];
   public readonly name: Attributes["name"];
@@ -14,12 +13,12 @@ export class Account {
   public readonly token: Token;
 
   constructor(attributes: Attributes) {
-    this.id = attributes.id;
+    this.accountId = attributes.accountId;
     this.status = attributes.status;
     this.alias = attributes.alias;
     this.name = attributes.name;
     this.email = attributes.email;
-    this.token = new Token(attributes.id, attributes.token);
+    this.token = new Token(attributes.accountId, attributes.token);
   }
 
   /*
@@ -61,7 +60,7 @@ export class Account {
    |--------------------------------------------------------------------------------
    */
 
-  public is(status: Status) {
+  public is(status: Account["status"]) {
     return this.status === status;
   }
 
@@ -73,7 +72,7 @@ export class Account {
 
   public toJSON(attributes: Partial<Attributes>) {
     return {
-      id: this.id,
+      accountId: this.accountId,
       status: this.status,
       alias: this.alias,
       name: this.name,

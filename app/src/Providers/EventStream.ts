@@ -69,9 +69,11 @@ container.set(
      * A simple itteration guard is added so that we can escape out of a potential
      * infinite loop.
      */
-    private async pull(streamId: string, itteration = 0) {
-      if (itteration > 100) {
-        throw new Error("Encountered more than 100 stream pull operations, an infinite loop may be at large!");
+    private async pull(streamId: string, itterations = 0) {
+      if (itterations > 10) {
+        throw new Error(
+          `Event Stream Violation: Escaping pull operation, infinite loop candidate detected after ${itterations} pull itterations.`
+        );
       }
       socket
         .send("streams.pull", { streamId, hash: await this.getRemoteCursor(streamId) })
@@ -81,7 +83,7 @@ container.set(
               await store.insert(event);
             }
             await this.setRemoteCursor(streamId, events[events.length - 1].commit);
-            return this.pull(streamId, itteration + 1); // keep pulling the stream until its hydrated
+            return this.pull(streamId, itterations + 1); // keep pulling the stream until its hydrated
           }
         });
     }

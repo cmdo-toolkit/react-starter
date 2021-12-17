@@ -15,6 +15,7 @@ container
       public async addRole(): Promise<void> {
         throw new Error("Operation cannot be performed on client");
       }
+
       /**
        * Retrieve role from persistent storage.
        */

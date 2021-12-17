@@ -1,12 +1,21 @@
 {
-  "editor.formatOnSave": true,
-  "editor.formatOnPaste": false,
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": false,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": true
+    }
+  },
+  "[typescriptreact]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": false,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": true
+    }
+  },
   "eslint.workingDirectories": [
     {
       "mode": "auto"
     }
-  ],
-  "editor.codeActionsOnSave": {
-    "source.fixAll": true
-  }
+  ]
 }

@@ -1,8 +1,8 @@
 import { RoleData } from "cmdo-auth";
 import type { EventRecord } from "cmdo-events";
+import type { Account } from "stores";
 
 import { mongo } from "./Lib/Mongo";
-import type { Account } from "./Types/Account";
 
 export const collection = {
   accounts: mongo.collection<Account>("accounts"),

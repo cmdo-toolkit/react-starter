@@ -16,10 +16,27 @@
     ]
   },
   "scripts": {
+    "clean": "rm -rf ./node_modules ./package-lock.json && npm run clean:api && npm run clean:app && npm run clean:stores",
+    "clean:api": "cd ./api && npm run clean",
+    "clean:app": "cd ./app && npm run clean",
+    "clean:stores": "cd ./stores && npm run clean",
+
+    "setup": "npm i && npm run setup:api && npm run setup:app && npm run setup:stores",
+    "setup:api": "cd ./api && npm i",
+    "setup:app": "cd ./app && npm i",
+    "setup:stores": "cd ./stores && npm run build",
+
+    "start": "npm run api & npm run app",
+    "api": "cd ./api && docker-compose up -d && npm start",
+    "app": "cd ./app && npm start",
+
+    "stop": "npm run stop:api",
+    "stop:api": "cd ./api && docker-compose down",
+
     "test": "node --inspect ./node_modules/.bin/jest --runInBand --verbose"
   },
   "dependencies": {
-    "cmdo-auth": "../cmdo-auth",
+    "cmdo-auth": "1.0.0-rc12",
     "cmdo-events": "3.0.0-rc19",
     "nanoid": "^3.1.30"
   },

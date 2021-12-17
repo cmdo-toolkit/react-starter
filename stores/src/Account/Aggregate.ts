@@ -7,9 +7,9 @@ export type Account = {
   token: string;
 };
 
-export type Status = "onboarding" | "active" | "closed";
+type Status = "onboarding" | "active" | "closed";
 
-export type Name = {
+type Name = {
   family: string;
   given: string;
 };
