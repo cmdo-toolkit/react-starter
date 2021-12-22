@@ -10,5 +10,6 @@ export type Collection = keyof typeof collection;
 export const collection = {
   accounts: new DBCollection(Account, adapter),
   events: new DBCollection(Event, adapter),
+  queue: new DBCollection(Event, adapter),
   streams: new DBCollection(Stream, adapter)
 };

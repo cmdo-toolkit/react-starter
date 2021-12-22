@@ -13,7 +13,7 @@ import { wss } from "./Providers/WebSocketServer";
 (async function main(): Promise<void> {
   await database();
   await providers();
-  await routes();
+  await modules();
   await projections();
   await start();
 })();
@@ -35,11 +35,8 @@ async function database(): Promise<void> {
 
 /*
  |--------------------------------------------------------------------------------
- | Dependency Injectors
+ | Providers
  |--------------------------------------------------------------------------------
- |
- | Register service providers for module dependencies.
- |
  */
 
 async function providers(): Promise<void> {
@@ -48,18 +45,18 @@ async function providers(): Promise<void> {
 
 /*
  |--------------------------------------------------------------------------------
- | Routes
+ | Modules
  |--------------------------------------------------------------------------------
  */
 
-async function routes() {
+async function modules() {
   await Promise.all([
-    import("./Routes/Account"),
-    import("./Routes/Api"),
-    import("./Routes/Auth"),
-    import("./Routes/Channels"),
-    import("./Routes/Events"),
-    import("./Routes/Streams")
+    import("./Modules/Account"),
+    import("./Modules/Api"),
+    import("./Modules/Auth"),
+    import("./Modules/Channels"),
+    import("./Modules/Events"),
+    import("./Modules/Streams")
   ]);
 }
 

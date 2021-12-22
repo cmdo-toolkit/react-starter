@@ -1,17 +1,9 @@
 import { container, EventRecord, publisher } from "cmdo-events";
-import { Action, Route } from "cmdo-socket";
+import { Action } from "cmdo-socket";
 
-import { collection } from "../Collections";
-import { hasData } from "../Policies/hasData";
-import { wss } from "../Providers/WebSocketServer";
+import { collection } from "../../Collections";
 
-/*
- |--------------------------------------------------------------------------------
- | Actions
- |--------------------------------------------------------------------------------
- */
-
-const add: Action<EventRecord> = async function (socket, event, store = container.get("EventStore")) {
+export const add: Action<EventRecord> = async function (socket, event, store = container.get("EventStore")) {
   // const permission = socket.auth.access.get(descriptor.stream).can("add", descriptor.event.type);
   // if (!permission.granted) {
   //   return this.reject("You are not authorized to add this event to the stream");
@@ -25,7 +17,7 @@ const add: Action<EventRecord> = async function (socket, event, store = containe
   }
 };
 
-const get: Action<{ stream: string; hash?: string }> = async function (_, { stream, hash }) {
+export const get: Action<{ stream: string; hash?: string }> = async function (_, { stream, hash }) {
   // const permission = socket.auth.access.get(stream).can("get", "events");
   // if (!permission.granted) {
   //   return this.reject("You are not authorized to get events on this stream");
@@ -39,7 +31,7 @@ const get: Action<{ stream: string; hash?: string }> = async function (_, { stre
   return this.respond(await collection.events.find(filter).sort({ "meta.timestamp": 1 }).toArray());
 };
 
-const rehydrate: Action = async function () {
+export const rehydrate: Action = async function () {
   console.log("Starting re-hydration process!");
   await Promise.all(
     Object.keys(collection).map((key) => {
@@ -56,15 +48,3 @@ const rehydrate: Action = async function () {
   console.log("Hydration ended successfully");
   return this.respond();
 };
-
-/*
- |--------------------------------------------------------------------------------
- | Register
- |--------------------------------------------------------------------------------
- */
-
-wss.register([
-  Route.on("events.add", [hasData(["id", "streams", "event"]), add]),
-  Route.on("events.get", [hasData(["stream"]), get]),
-  Route.on("events.rehydrate", [rehydrate])
-]);

@@ -7,23 +7,23 @@
     "lint": "eslint 'src/**/*.ts' --fix"
   },
   "dependencies": {
-    "chalk": "4.1.2",
+    "chalk": "5.0.0",
     "cmdo-http": "3.0.2",
     "cmdo-socket": "3.0.0-rc4",
     "dotenv": "10.0.0",
     "eventemitter3": "4.0.7",
     "jsonwebtoken": "^8.5.1",
-    "mongodb": "4.1.4",
+    "mongodb": "4.2.2",
     "nanoid": "3.1.30",
     "stores": "../stores"
   },
   "devDependencies": {
-    "@swc/core": "1.2.108",
-    "@swc/helpers": "0.2.14",
+    "@swc/core": "1.2.121",
+    "@swc/helpers": "0.3.2",
     "@types/eventemitter3": "2.0.2",
     "@types/jsonwebtoken": "^8.5.6",
     "@types/mongodb": "4.0.6",
-    "@types/node": "16.11.7",
+    "@types/node": "17.0.2",
     "ts-node-dev": "1.1.8"
   }
 }
