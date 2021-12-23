@@ -1,8 +1,7 @@
 import { loadCollections } from "./Collections";
 import { config } from "./Config";
 import { mongo } from "./Lib/Mongo";
-import { hts } from "./Providers/HttpServer";
-import { wss } from "./Providers/WebSocketServer";
+import { server } from "./Providers/Server";
 
 /*
  |--------------------------------------------------------------------------------
@@ -77,8 +76,7 @@ async function projections() {
  */
 
 async function start(): Promise<void> {
-  wss.connect(hts);
-  hts.listen(config.port, () => {
+  server.listen(config.port, () => {
     console.log(`Server listening on port ${config.port}`);
   });
 }

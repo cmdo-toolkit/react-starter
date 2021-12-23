@@ -1,5 +1,5 @@
 import { container, EventRecord } from "cmdo-events";
-import type { Action } from "cmdo-socket";
+import type { WsAction } from "cmdo-server";
 
 import { collection } from "../../Collections";
 
@@ -9,7 +9,7 @@ import { collection } from "../../Collections";
  |--------------------------------------------------------------------------------
  */
 
-export const push: Action<{ events: EventRecord[] }> = async function (socket, { events }, store = container.get("EventStore")) {
+export const push: WsAction<{ events: EventRecord[] }> = async function (socket, { events }, store = container.get("EventStore")) {
   // const permission = socket.auth.access.get(descriptor.stream).can("add", descriptor.event.type);
   // if (!permission.granted) {
   //   return this.reject("You are not authorized to add this event to the stream");
@@ -19,10 +19,10 @@ export const push: Action<{ events: EventRecord[] }> = async function (socket, {
       await store.insert(event);
       socket.to(`stream:${event.streamId}`).emit("event", event);
     } catch (error) {
-      return this.reject(error.message);
+      return this.reject(400, error.message);
     }
   }
-  return this.respond();
+  return this.resolve();
 };
 
 /*
@@ -31,7 +31,7 @@ export const push: Action<{ events: EventRecord[] }> = async function (socket, {
  |--------------------------------------------------------------------------------
  */
 
-export const pull: Action<{ streamId: string; hash?: string }> = async function (_, { streamId, hash }) {
+export const pull: WsAction<{ streamId: string; hash?: string }> = async function (_, { streamId, hash }) {
   // const permission = socket.auth.access.get(stream).can("get", "events");
   // if (!permission.granted) {
   //   return this.reject("You are not authorized to get events on this stream");
@@ -42,7 +42,7 @@ export const pull: Action<{ streamId: string; hash?: string }> = async function 
       $gt: hash
     };
   }
-  return this.respond(await collection.events.find(filter).sort({ date: 1 }).toArray());
+  return this.resolve(await collection.events.find(filter).sort({ date: 1 }).toArray());
 };
 
 /*
@@ -51,13 +51,13 @@ export const pull: Action<{ streamId: string; hash?: string }> = async function 
  |--------------------------------------------------------------------------------
  */
 
-export const join: Action<{ streamId: string }> = async function (socket, { streamId }) {
+export const join: WsAction<{ streamId: string }> = async function (socket, { streamId }) {
   // const permission = socket.auth.access.get(streamId).can("join", "stream");
   // if (!permission.granted) {
   //   return this.reject("You are not authorized to join this stream");
   // }
   socket.join(`stream:${streamId}`);
-  return this.respond();
+  return this.resolve();
 };
 
 /*
@@ -66,7 +66,7 @@ export const join: Action<{ streamId: string }> = async function (socket, { stre
  |--------------------------------------------------------------------------------
  */
 
-export const leave: Action<{ streamId: string }> = async function (socket, { streamId }) {
+export const leave: WsAction<{ streamId: string }> = async function (socket, { streamId }) {
   socket.leave(`stream:${streamId}`);
-  return this.respond();
+  return this.resolve();
 };

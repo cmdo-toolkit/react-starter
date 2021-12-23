@@ -1,5 +1,5 @@
 import { Auth, container } from "cmdo-auth";
-import type { Action } from "cmdo-socket";
+import type { WsAction } from "cmdo-server";
 
 /*
  |--------------------------------------------------------------------------------
@@ -7,13 +7,13 @@ import type { Action } from "cmdo-socket";
  |--------------------------------------------------------------------------------
  */
 
-export const sign: Action<{ token: string }> = async function (socket, { token }) {
+export const sign: WsAction<{ token: string }> = async function (socket, { token }) {
   try {
     socket.auth = await Auth.resolve(token);
   } catch (err) {
-    return this.reject(err.message);
+    return this.reject(400, err.message);
   }
-  return this.respond();
+  return this.resolve();
 };
 
 /*
@@ -22,8 +22,8 @@ export const sign: Action<{ token: string }> = async function (socket, { token }
  |--------------------------------------------------------------------------------
  */
 
-export const getPermissions: Action = async function (socket, { tenantId }) {
-  return this.respond(await container.get("Database").getPermissions(tenantId, socket.auth.auditor));
+export const getPermissions: WsAction = async function (socket, { tenantId }) {
+  return this.resolve(await container.get("Database").getPermissions(tenantId, socket.auth.auditor));
 };
 
 /*
@@ -32,7 +32,7 @@ export const getPermissions: Action = async function (socket, { tenantId }) {
  |--------------------------------------------------------------------------------
  */
 
-export const destroy: Action = async function (socket) {
+export const destroy: WsAction = async function (socket) {
   socket.auth = await Auth.guest();
-  return this.respond();
+  return this.resolve();
 };

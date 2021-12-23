@@ -1,4 +1,4 @@
-import { Action } from "cmdo-socket";
+import { WsAction } from "cmdo-server";
 import * as jwt from "jsonwebtoken";
 import { stores } from "stores";
 
@@ -12,16 +12,16 @@ import * as tokenService from "./Token.Service";
  |--------------------------------------------------------------------------------
  */
 
-export const create: Action<{ email: string }> = async function (_, { email }) {
+export const create: WsAction<{ email: string }> = async function (_, { email }) {
   try {
     const account = await accountService.getByEmailOrCreate(email);
     if (!account) {
-      return this.reject("Failed to retrieve account id");
+      return this.reject(400, "Failed to retrieve account id");
     }
     await tokenService.create("console", account.accountId);
-    return this.respond();
+    return this.resolve();
   } catch (error) {
-    return this.reject(error.message);
+    return this.reject(500, error.message);
   }
 };
 
@@ -31,15 +31,15 @@ export const create: Action<{ email: string }> = async function (_, { email }) {
  |--------------------------------------------------------------------------------
  */
 
-export const validate: Action<{ email: string; token: string }> = async function (_, { token, email }) {
+export const validate: WsAction<{ email: string; token: string }> = async function (_, { token, email }) {
   const account = await accountService.getByEmail(email);
 
   if (!account) {
-    return this.reject("Token is invalid or has expired");
+    return this.reject(400, "Token is invalid or has expired");
   }
 
   if (account.token !== token) {
-    return this.reject("Token is invalid or has expired");
+    return this.reject(400, "Token is invalid or has expired");
   }
 
   if (account.status === "onboarding") {
@@ -48,5 +48,5 @@ export const validate: Action<{ email: string; token: string }> = async function
 
   await tokenService.remove(account.accountId);
 
-  return this.respond({ token: jwt.sign({ auditor: account.accountId }, config.auth.secret) });
+  return this.resolve({ token: jwt.sign({ auditor: account.accountId }, config.auth.secret) });
 };

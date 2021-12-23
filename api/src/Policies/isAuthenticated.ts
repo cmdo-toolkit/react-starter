@@ -1,5 +1,4 @@
-import { Action as HttpAction } from "cmdo-http";
-import { Action as SocketAction } from "cmdo-socket";
+import { HttpAction, WsAction } from "cmdo-server";
 
 /*
  |--------------------------------------------------------------------------------
@@ -7,11 +6,11 @@ import { Action as SocketAction } from "cmdo-socket";
  |--------------------------------------------------------------------------------
  */
 
-export const isSocketAuthenticated: SocketAction = async function ({ auth }) {
+export const isSocketAuthenticated: WsAction = async function ({ auth }) {
   if (await auth.isAuthenticated) {
     return this.accept();
   }
-  return this.reject("Unauthorized");
+  return this.reject(401, "Unauthorized");
 };
 
 export const isRequestAuthenticated: HttpAction = async function ({ auth }) {

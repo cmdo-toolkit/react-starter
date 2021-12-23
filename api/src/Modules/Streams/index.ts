@@ -1,7 +1,5 @@
-import { Route } from "cmdo-socket";
-
 import { hasData } from "../../Policies/hasData";
-import { wss } from "../../Providers/WebSocketServer";
+import { route } from "../../Providers/Server";
 import { join, leave, pull, push } from "./Stream.Controller";
 
 // store.on("saved", (descriptor) => {
@@ -10,9 +8,7 @@ import { join, leave, pull, push } from "./Stream.Controller";
 //   }
 // });
 
-wss.register([
-  Route.on("streams.push", [hasData(["events"]), push]),
-  Route.on("streams.pull", [hasData(["streamId"]), pull]),
-  Route.on("streams.join", [hasData(["streamId"]), join]),
-  Route.on("streams.leave", [hasData(["streamId"]), leave])
-]);
+route.on("streams.push", [hasData(["events"]), push]);
+route.on("streams.pull", [hasData(["streamId"]), pull]);
+route.on("streams.join", [hasData(["streamId"]), join]);
+route.on("streams.leave", [hasData(["streamId"]), leave]);

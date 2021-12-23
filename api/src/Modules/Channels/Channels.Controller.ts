@@ -1,4 +1,4 @@
-import { Action } from "cmdo-socket";
+import { WsAction } from "cmdo-server";
 
 /*
  |--------------------------------------------------------------------------------
@@ -6,7 +6,7 @@ import { Action } from "cmdo-socket";
  |--------------------------------------------------------------------------------
  */
 
-export const join: Action<{ channelId: string }> = async function (socket, { channelId }) {
+export const join: WsAction<{ channelId: string }> = async function (socket, { channelId }) {
   // if (channelId !== "public") {
   //   const permission = access.can("join", "room");
   //   if (!permission.granted) {
@@ -14,7 +14,7 @@ export const join: Action<{ channelId: string }> = async function (socket, { cha
   //   }
   // }
   socket.join(`channel:${channelId}`);
-  return this.respond();
+  return this.resolve();
 };
 
 /*
@@ -23,9 +23,9 @@ export const join: Action<{ channelId: string }> = async function (socket, { cha
  |--------------------------------------------------------------------------------
  */
 
-export const message: Action<{ channelId: string; message: string }> = async function (socket, { channelId, message }) {
+export const message: WsAction<{ channelId: string; message: string }> = async function (socket, { channelId, message }) {
   socket.to(`channel:${channelId}`).emit("chat", { message });
-  return this.respond();
+  return this.resolve();
 };
 
 /*
@@ -34,7 +34,7 @@ export const message: Action<{ channelId: string; message: string }> = async fun
  |--------------------------------------------------------------------------------
  */
 
-export const leave: Action<{ channelId: string }> = async function (socket, { channelId }) {
+export const leave: WsAction<{ channelId: string }> = async function (socket, { channelId }) {
   socket.leave(`channel:${channelId}`);
-  return this.respond();
+  return this.resolve();
 };

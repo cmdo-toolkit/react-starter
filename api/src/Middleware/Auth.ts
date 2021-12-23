@@ -1,19 +1,12 @@
 import { Auth } from "cmdo-auth";
-import { HttpError, Middleware } from "cmdo-http";
-import { Action } from "cmdo-socket";
+import { HttpError, Middleware } from "cmdo-server";
 import { ServerResponse } from "http";
 
 /*
  |--------------------------------------------------------------------------------
- | Types
+ | Module Extension
  |--------------------------------------------------------------------------------
  */
-
-declare module "cmdo-socket" {
-  interface Client {
-    auth: Auth;
-  }
-}
 
 declare module "http" {
   interface IncomingMessage {
@@ -27,26 +20,15 @@ declare module "http" {
  |--------------------------------------------------------------------------------
  */
 
-export const auth: {
-  socket: Action;
-  http: Middleware;
-} = {
-  socket: async function (socket) {
-    if (!socket.auth) {
-      socket.auth = await Auth.guest();
+export const auth: Middleware = async function (req, res) {
+  if (req.headers.authorization) {
+    try {
+      req.auth = await Auth.resolve(req.headers.authorization);
+    } catch (err) {
+      sendUnauthorizedResponse(res, err);
     }
-    return this.accept();
-  },
-  http: async function (req, res) {
-    if (req.headers.authorization) {
-      try {
-        req.auth = await Auth.resolve(req.headers.authorization);
-      } catch (err) {
-        sendUnauthorizedResponse(res, err);
-      }
-    } else {
-      req.auth = await Auth.guest();
-    }
+  } else {
+    req.auth = await Auth.guest();
   }
 };
 

@@ -1,5 +1,4 @@
-import { Action as HTTPAction } from "cmdo-http";
-import { Action as WSAction } from "cmdo-socket";
+import { HttpAction, WsAction } from "cmdo-server";
 
 /*
  |--------------------------------------------------------------------------------
@@ -7,8 +6,8 @@ import { Action as WSAction } from "cmdo-socket";
  |--------------------------------------------------------------------------------
  */
 
-export const meta: HTTPAction = async function () {
-  return this.respond({
+export const meta: HttpAction = async function () {
+  return this.resolve({
     service: "production",
     version: "0.0.1-DEV"
   });
@@ -20,6 +19,6 @@ export const meta: HTTPAction = async function () {
  |--------------------------------------------------------------------------------
  */
 
-export const ping: WSAction = async function () {
-  return this.respond({ pong: true });
+export const ping: WsAction = async function () {
+  return this.resolve({ pong: true });
 };

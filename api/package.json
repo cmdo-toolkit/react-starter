@@ -8,8 +8,7 @@
   },
   "dependencies": {
     "chalk": "5.0.0",
-    "cmdo-http": "3.0.2",
-    "cmdo-socket": "3.0.0-rc4",
+    "cmdo-server": "../../cmdo-server",
     "dotenv": "10.0.0",
     "eventemitter3": "4.0.7",
     "jsonwebtoken": "^8.5.1",

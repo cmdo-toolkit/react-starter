@@ -1,4 +1,4 @@
-import { Action as SocketAction } from "cmdo-socket";
+import { WsAction } from "cmdo-server";
 
 /*
  |--------------------------------------------------------------------------------
@@ -6,7 +6,7 @@ import { Action as SocketAction } from "cmdo-socket";
  |--------------------------------------------------------------------------------
  */
 
-export function hasData(keys: string[]): SocketAction {
+export function hasData(keys: string[]): WsAction {
   return async function (_, data) {
     const missing: string[] = [];
     for (const key of keys) {
@@ -15,7 +15,7 @@ export function hasData(keys: string[]): SocketAction {
       }
     }
     if (missing.length) {
-      return this.reject(`Socket Message Violation: Missing required keys '${missing.join(", ")}' in data`);
+      return this.reject(400, `Socket Message Violation: Missing required keys '${missing.join(", ")}' in data`);
     }
     return this.accept();
   };

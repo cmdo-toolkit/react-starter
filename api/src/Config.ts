@@ -3,7 +3,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 export const config = {
-  port: process.env.PORT || 8370,
+  port: process.env.PORT ? parseInt(process.env.PORT) : 8370,
   auth: {
     secret: process.env.AUTH_SECRET || "development",
     token: {

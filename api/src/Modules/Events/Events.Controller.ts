@@ -1,9 +1,9 @@
 import { container, EventRecord, publisher } from "cmdo-events";
-import { Action } from "cmdo-socket";
+import { WsAction } from "cmdo-server";
 
 import { collection } from "../../Collections";
 
-export const add: Action<EventRecord> = async function (socket, event, store = container.get("EventStore")) {
+export const add: WsAction<EventRecord> = async function (socket, event, store = container.get("EventStore")) {
   // const permission = socket.auth.access.get(descriptor.stream).can("add", descriptor.event.type);
   // if (!permission.granted) {
   //   return this.reject("You are not authorized to add this event to the stream");
@@ -11,13 +11,13 @@ export const add: Action<EventRecord> = async function (socket, event, store = c
   try {
     await store.insert(event);
     socket.to(`stream:${event.streamId}`).emit("event", event);
-    return this.respond();
+    return this.resolve();
   } catch (error) {
-    return this.reject(error.message);
+    return this.reject(400, error.message);
   }
 };
 
-export const get: Action<{ stream: string; hash?: string }> = async function (_, { stream, hash }) {
+export const get: WsAction<{ stream: string; hash?: string }> = async function (_, { stream, hash }) {
   // const permission = socket.auth.access.get(stream).can("get", "events");
   // if (!permission.granted) {
   //   return this.reject("You are not authorized to get events on this stream");
@@ -28,10 +28,10 @@ export const get: Action<{ stream: string; hash?: string }> = async function (_,
       $gt: hash
     };
   }
-  return this.respond(await collection.events.find(filter).sort({ "meta.timestamp": 1 }).toArray());
+  return this.resolve(await collection.events.find(filter).sort({ "meta.timestamp": 1 }).toArray());
 };
 
-export const rehydrate: Action = async function () {
+export const rehydrate: WsAction = async function () {
   console.log("Starting re-hydration process!");
   await Promise.all(
     Object.keys(collection).map((key) => {
@@ -46,5 +46,5 @@ export const rehydrate: Action = async function () {
     await publisher.project(event, { outdated: false, hydrated: true });
   }
   console.log("Hydration ended successfully");
-  return this.respond();
+  return this.resolve();
 };

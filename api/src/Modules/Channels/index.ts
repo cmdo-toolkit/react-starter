@@ -1,11 +1,7 @@
-import { Route } from "cmdo-socket";
-
 import { hasData } from "../../Policies/hasData";
-import { wss } from "../../Providers/WebSocketServer";
+import { route } from "../../Providers/Server";
 import { join, leave, message } from "./Channels.Controller";
 
-wss.register([
-  Route.on("channels.join", [hasData(["channelId"]), join]),
-  Route.on("channels.message", [hasData(["channelId", "message"]), message]),
-  Route.on("channels.leave", [hasData(["channelId"]), leave])
-]);
+route.on("channels.join", [hasData(["channelId"]), join]);
+route.on("channels.message", [hasData(["channelId", "message"]), message]);
+route.on("channels.leave", [hasData(["channelId"]), leave]);
