@@ -1,4 +1,4 @@
-import { sign } from "./Auth";
+import { resolve } from "./Auth";
 import { socket } from "./Providers/Socket";
 
 /*
@@ -12,7 +12,7 @@ export async function setup(): Promise<void> {
   await dependencies();
   await event();
   await routes();
-  await resolve();
+  await auth();
 }
 
 async function dependencies(): Promise<void> {
@@ -27,9 +27,9 @@ async function routes() {
   await Promise.all([import("./Router/Routes")]);
 }
 
-async function resolve() {
+async function auth() {
   const token = localStorage.getItem("token");
   if (token) {
-    await sign(token);
+    await resolve(token);
   }
 }

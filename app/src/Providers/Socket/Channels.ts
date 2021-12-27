@@ -1,7 +1,4 @@
-import type { Socket } from "cmdo-socket-client";
-import { log, Service } from "cmdo-socket-client";
-
-const debug = log.socket.extend("channels");
+import type { Service, Socket } from "cmdo-socket-client";
 
 /*
  |--------------------------------------------------------------------------------
@@ -46,18 +43,18 @@ export class Channels implements Service {
     return this.socket
       .send("channels.join", { channelId })
       .then(() => {
-        debug("joined %s", channelId);
+        console.log("joined %s", channelId);
         this.channels.add(channelId);
         return this;
       })
       .catch((error) => {
-        debug("error %s %O", channelId, error);
+        console.log("error %s %O", channelId, error);
       });
   }
 
   public async leave(channelId: string) {
     return this.socket.send("channels.leave", { channelId }).then(() => {
-      debug("left %s", channelId);
+      console.log("left %s", channelId);
       this.channels.delete(channelId);
       return this;
     });

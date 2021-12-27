@@ -10,7 +10,7 @@
   "dependencies": {
     "cmdo-db": "1.0.0",
     "cmdo-router": "3.0.3",
-    "cmdo-socket-client": "3.0.0-rc9",
+    "cmdo-socket-client": "../../cmdo-socket-client",
     "date-fns": "2.27.0",
     "debug": "4.3.3",
     "eventemitter3": "4.0.7",

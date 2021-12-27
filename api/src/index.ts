@@ -50,7 +50,6 @@ async function providers(): Promise<void> {
 
 async function modules() {
   await Promise.all([
-    import("./Modules/Account"),
     import("./Modules/Api"),
     import("./Modules/Auth"),
     import("./Modules/Channels"),

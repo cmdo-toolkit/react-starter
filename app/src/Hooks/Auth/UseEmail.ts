@@ -1,4 +1,4 @@
-import { socket } from "../../Providers/Socket";
+import { token } from "../../Auth";
 import type { AuthDispatch } from "../../Reducers/Auth";
 import { useForm } from "../UseForm";
 
@@ -23,8 +23,9 @@ export function useEmail(dispatch: AuthDispatch): [State, Actions] {
         if (email === "") {
           return alert("ENTER AN EMAIL");
         }
-        socket.send("account.token", { email });
-        dispatch({ type: "SHOW_PIN", email });
+        token(email).then(() => {
+          dispatch({ type: "SHOW_PIN", email });
+        });
       }
     }
   ];
